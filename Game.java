@@ -78,7 +78,7 @@ public class Game {
 		// CREATING AND ADDING ITEMS TO PLAYER INVENTORY 
 		Item potion = new Potion("potion", 1, 100, true, 10);
 		this.getPlayer().addItem(potion);
-		Item sword = new Item("sword", 1, 200, true);
+		Item sword = new Item("sword", 10, 200, true);
 		this.getPlayer().addItem(sword);
 		
 		// ADDING PLAYER TO THE WORLD
@@ -183,7 +183,8 @@ public class Game {
 			else {
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
-				return "You take " + itemName + ".";
+				return "You take " + itemName + ". \n"
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
 			}
 		}
 		
@@ -196,7 +197,8 @@ public class Game {
 			else {
 				this.getPlayer().getCurrentLocation().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().removeItem(itemName);
-				return "You drop " + itemName + ".";
+				return "You drop " + itemName + ". \n"
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + "more units of weight.";
 			}
 		}
 		
