@@ -62,9 +62,9 @@ public class Game {
 		
 		location1.addPaths(location1, "east", location2, "west");
 		
-		Item potion = new Item("potion");
+		Item potion = new Item("potion", 1, 100, true);
 		this.getPlayer().addItem(potion);
-		Item healthpotion = new Item("healthpotion");
+		Item healthpotion = new Item("healthpotion", 1, 200, true);
 		this.getPlayer().addItem(healthpotion);
 		this.getPlayer().setLocation(location1);
 		System.out.println("All set up.");
@@ -110,6 +110,8 @@ public class Game {
 		public String takeItem(String itemName) {
 			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
 				return "There is no " + " in this location.";
+			} else if (this.getPlayer().getCurrentLocation().getItem(itemName).isRemovable() == false) {
+				return "You cannot take this item.";
 			}
 			else {
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));

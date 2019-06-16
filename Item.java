@@ -7,8 +7,11 @@ public class Item {
 	private int price;
 	private boolean removable;
 	
-	public Item(String name) {
+	public Item(String name,int weight, int price, boolean removable) {
 		this.setName(name);
+		this.weight = weight;
+		this.price = price;
+		this.removable = removable;
 	}
 	
 	public String getName() {
@@ -19,5 +22,16 @@ public class Item {
 		this.name = name;
 	}
 	
+	public int getWeight() {
+		return this.weight;
+	}
+	
+	public int getPrice() {
+		return this.price;
+	}
+	
+	public boolean isRemovable() {
+		return this.removable;
+	}
 	
 }
