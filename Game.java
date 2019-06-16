@@ -44,26 +44,53 @@ public class Game {
 		this.world = gameWorld;
 		
 		// CREATING AND ADDING LOCATIONS
-		Location location1 = new Location("test location", "this is a test area");
-		this.addLocation(location1);
-		Location location2 = new Location("tl2", "this is another test area");
-		this.addLocation(location2);
-		
+		Location valley = new Location("valley", "Evalon Valley. A green valley with fertile soil.");
+		this.addLocation(valley);
+		Location plains = new Location("plains", "West Plains. A desolate plain.");
+		this.addLocation(plains);
+		Location mountain = new Location("mountain", "Northern Mountains. A labyrinth of razor sharp rocks.");
+		this.addLocation(mountain);
+		Location shore = new Location("shore", "Western Shore. The water is calm.");
+		this.addLocation(shore);
+		Location woods = new Location("woods", "King's Forest. A bright forest with high pines.");
+		this.addLocation(woods);
+		Location hills = new Location("hills", "Evalon hills.");
+		this.addLocation(hills);
 		
 		
 		// SETTING LOCATION HASHMAPS
-		HashMap<String, Item> loc1Item = new HashMap<String, Item>();
-		HashMap<String, Location> loc1Path = new HashMap<String, Location>();
-		location1.setLocationHashes(loc1Path, loc1Item);
+		HashMap<String, Item> valleyItems = new HashMap<String, Item>();
+		HashMap<String, Location> valleyPaths = new HashMap<String, Location>();
+		valley.setLocationHashes(valleyPaths, valleyItems);
 		
-		HashMap<String, Item> loc2Item = new HashMap<String, Item>();
-		HashMap<String, Location> loc2Path = new HashMap<String, Location>();
-		location2.setLocationHashes(loc2Path, loc2Item);
+		HashMap<String, Item> plainsItems = new HashMap<String, Item>();
+		HashMap<String, Location> plainsPaths = new HashMap<String, Location>();
+		plains.setLocationHashes(plainsPaths, plainsItems);
 		
+		HashMap<String, Item> mountainItems = new HashMap<String, Item>();
+		HashMap<String, Location> mountainPaths = new HashMap<String, Location>();
+		mountain.setLocationHashes(mountainPaths, mountainItems);
+		
+		HashMap<String, Item> shoreItems = new HashMap<String, Item>();
+		HashMap<String, Location> shorePaths = new HashMap<String, Location>();
+		shore.setLocationHashes(shorePaths, shoreItems);
+		
+		HashMap<String, Item> woodsItems = new HashMap<String, Item>();
+		HashMap<String, Location> woodsPaths = new HashMap<String, Location>();
+		woods.setLocationHashes(woodsPaths, woodsItems);
+		
+		HashMap<String, Item> hillsItems = new HashMap<String, Item>();
+		HashMap<String, Location> hillsPaths = new HashMap<String, Location>();
+		hills.setLocationHashes(hillsPaths, hillsItems);
 		
 		// CONNECTING LOCATIONS
 		// DOES NOT MATTER WHICH LOCATION ON WHICH THE METHOD IS CALLED
-		location1.addPaths(location1, "east", location2, "west");
+		valley.addPaths(valley, "east", plains, "west");
+		valley.addPaths(valley, "north", mountain, "south");
+		valley.addPaths(valley, "west", shore, "east");
+		valley.addPaths(valley, "south", woods, "north");
+		woods.addPaths(woods, "east", hills, "west");
+		
 		
 		// CREATING AND SETTING PLAYER INVENTORY
 		HashMap<String, Item> inventory = new HashMap<String, Item>();
@@ -78,7 +105,7 @@ public class Game {
 		
 		
 		// SETTING LOCATION, CARRY CAPACITY, GOLD AMOUNT, HEALTH, MAXHEALTH, XP AND LEVEL
-		this.getPlayer().setLocation(location1);
+		this.getPlayer().setLocation(valley);
 		this.getPlayer().setCarryCapacity(100);
 		this.getPlayer().setGold(10);
 		this.getPlayer().setHealth(100);
