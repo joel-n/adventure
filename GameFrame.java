@@ -29,7 +29,7 @@ public class GameFrame extends JFrame {
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	        JLabel emptyLabel = new JLabel("");
-	        emptyLabel.setPreferredSize(new Dimension(400, 600));
+	        emptyLabel.setPreferredSize(new Dimension(600, 600));
 	        frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
 	        
 	        
@@ -68,18 +68,19 @@ public class GameFrame extends JFrame {
 	        
 	        levelpanel.add(levelbar, BorderLayout.LINE_START);
 	        levelpanel.add(xpbar, BorderLayout.LINE_END);
+	        
+	        
+	        // MESSAGE AT GAME START
+	        output.setText("Welcome to the world of Evalon! \n"
+	        		+ "Type \"help\" and press Enter to get a list of available commands. ");
 
 	    }
 		
 	    public void handleInput(JTextField input, JTextArea output) {
-	    	// String[] text = input.getText().split(" ");
-	    	
-	    	// System.out.println(text[0]); // control to see of input works
-	    	
 	    	String argument = input.getText();
 	    	output.setText(argument + "\n" + output.getText() + "\n "); // printing what user wrote directly
 	    	
-	    	this.presentNew(output, this.getGame().getPlayer().executeCommand(argument));
+	    	this.presentNew(output, this.getGame().executeCommand(argument));
 	    	
 	    	input.setText("");
 	    }
@@ -87,6 +88,7 @@ public class GameFrame extends JFrame {
 	    public void presentNew(JTextArea output, String string) {
 	    	output.setText(string + "\n" + output.getText());
 	    }
+	    
 	    
 	    
 	    /*
