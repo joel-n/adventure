@@ -27,6 +27,7 @@ public class GameFrame extends JFrame {
 	        //Create and set up the window.
 	        JFrame frame = new JFrame("Frame");
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        frame.setResizable(false);
 
 	        JLabel emptyLabel = new JLabel("");
 	        emptyLabel.setPreferredSize(new Dimension(600, 600));
