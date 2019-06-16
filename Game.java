@@ -37,10 +37,13 @@ public class Game {
 	
 	public void initAndSetWorld() {
 		
-		// SETUP LOCATIONS IN WORLD
+		//// SETUP LOCATIONS IN WORLD
+		
+		// CREATING AND SETTING GAME WORLD
 		HashMap<String, Location> gameWorld = new HashMap<String, Location>();
 		this.world = gameWorld;
 		
+		// CREATING AND ADDING LOCATIONS
 		Location location1 = new Location("test location", "this is a test area");
 		this.addLocation(location1);
 		Location location2 = new Location("tl2", "this is another test area");
@@ -48,10 +51,7 @@ public class Game {
 		
 		
 		
-		// SETUP ITEMS AND PATHS
-		HashMap<String, Item> inventory = new HashMap<String, Item>();
-		this.getPlayer().setInventoryHash(inventory);
-		
+		// SETTING LOCATION HASHMAPS
 		HashMap<String, Item> loc1Item = new HashMap<String, Item>();
 		HashMap<String, Location> loc1Path = new HashMap<String, Location>();
 		location1.setLocationHashes(loc1Path, loc1Item);
@@ -60,31 +60,69 @@ public class Game {
 		HashMap<String, Location> loc2Path = new HashMap<String, Location>();
 		location2.setLocationHashes(loc2Path, loc2Item);
 		
+		
+		// CONNECTING LOCATIONS
+		// DOES NOT MATTER WHICH LOCATION ON WHICH THE METHOD IS CALLED
 		location1.addPaths(location1, "east", location2, "west");
 		
+		// CREATING AND SETTING PLAYER INVENTORY
+		HashMap<String, Item> inventory = new HashMap<String, Item>();
+		this.getPlayer().setInventoryHash(inventory);
+		
+		// CREATING AND ADDING ITEMS TO PLAYER INVENTORY 
 		Item potion = new Item("potion", 1, 100, true);
 		this.getPlayer().addItem(potion);
 		Item healthpotion = new Item("healthpotion", 1, 200, true);
 		this.getPlayer().addItem(healthpotion);
+		
+		
+		
+		// SETTING LOCATION, CARRY CAPACITY AND GOLD AMOUNT
 		this.getPlayer().setLocation(location1);
 		this.getPlayer().setCarryCapacity(100);
 		this.getPlayer().setGold(10);
 		System.out.println("All set up.");
 	}
 	
+	// CALLED BY HANDLEINPUT() IN GAMEFRAME, CALLS APPROPRIATE FUNCTIONS DEPENDING ON PLAYER INPUT
+	// ALL COMMANDS RETURN A STRING TO THE OUTPUTHANDLER
+	public String executeCommand(String arguments) {
+		try {
+		String[] text = arguments.split(" ");
+		if (getEnteredCommand(text[0]) == null) {
+			return "This is not possible.";
+		}
+		else {
+		switch(text[0]) {
+		case "move": return this.moveTo(text[1]);
+		case "drink": return this.drink(text[1]);
+		case "take": return this.takeItem(text[1]);
+		case "drop": return this.dropItem(text[1]);
+		case "look": return this.look();
+		case "inventory": return this.inventory();
+		case "help": return this.help();
+		default: return "You cannot do that.";
+		}
+		}
+		}
+		catch(Exception e){
+			return "Specify a valid command or an argument.";
+
+		}}
 	
 	
-	// returns command if found, else returns null
+		// returns command from CommandStore if found, else returns null
 		public Command getEnteredCommand(String enteredCommand) {
 			return this.getPlayer().getPlayerCommands().get(enteredCommand);
 		}
 		
-		// returns location if found, else returns null
+		// returns location from if players current location found, else returns null
 		public Location getEnteredLocation(String enteredPath) {
 			return this.getPlayer().getCurrentLocation().getPaths().get(enteredPath);
 		}
 		
 		
+		// moves player to new location
 		public String moveTo(String newLocation) {
 			if (this.getEnteredLocation(newLocation) == null) {
 				return "You cannot go in that direction.";
@@ -95,6 +133,8 @@ public class Game {
 			}
 		}
 		
+		
+		// returns information on available paths and items of the players location
 		public String look() {
 			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
 				return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
@@ -107,6 +147,8 @@ public class Game {
 		"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString());
 		}
 		
+		
+		// consumes the item (potion)
 		public String drink(String itemName) {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
@@ -117,6 +159,8 @@ public class Game {
 			}
 		}
 		
+		// player takes an item from the location
+		// carry capacity managed in player's addItem method
 		public String takeItem(String itemName) {
 			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
 				return "There is no " + " in this location.";
@@ -132,6 +176,8 @@ public class Game {
 			}
 		}
 		
+		// player drops an item to the location
+		// carry capacity managed in player's removeItem method
 		public String dropItem(String itemName) {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
@@ -143,6 +189,8 @@ public class Game {
 			}
 		}
 		
+		
+		// returns information on the players items, carry capacity and gold
 		public String inventory() {
 			if(this.getPlayer().getInventory().isEmpty()) {
 				return "You have no items in your inventory." + "\n"
@@ -157,61 +205,9 @@ public class Game {
 
 		}
 		
-		
+		// returns the commands available to the player
 		public String help() {
 			return "You can use the commands: ".concat(this.getPlayer().getPlayerCommands().keySet().toString() + ".");
 		}
 		
-		
-		public String executeCommand(String arguments) {
-			try {
-			String[] text = arguments.split(" ");
-			if (getEnteredCommand(text[0]) == null) {
-				return "This is not possible.";
-			}
-			else {
-			switch(text[0]) {
-			case "move": return this.moveTo(text[1]);
-			case "drink": return this.drink(text[1]);
-			case "take": return this.takeItem(text[1]);
-			case "drop": return this.dropItem(text[1]);
-			case "look": return this.look();
-			case "inventory": return this.inventory();
-			case "help": return this.help();
-			default: return "You cannot do that.";
-			}
-			}
-			}
-			catch(Exception e){
-				return "Specify a valid command or an argument.";
-
-			}}
-
-	
-	
-	
-	
-	
-	/* maybe solved by letting the frame refer to the game-instance
-	 * and letting commands be passed to the game via the frame
-	
-	public GameFrame getFrame() {
-		return this.frame;
-	}
-	
-	public void setFrame(GameFrame frame) {
-		this.frame = frame;
-	}
-	 */
-	
-	
-	/*
-	public void main(String[] arguments) {
-		GameFrame frame = new GameFrame();
-		this.setFrame(frame);
-	}
-	*/
-	
-
-	
 }
