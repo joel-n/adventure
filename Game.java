@@ -77,12 +77,14 @@ public class Game {
 		
 		
 		
-		// SETTING LOCATION, CARRY CAPACITY AND GOLD AMOUNT
+		// SETTING LOCATION, CARRY CAPACITY, GOLD AMOUNT, HEALTH, MAXHEALTH, XP AND LEVEL
 		this.getPlayer().setLocation(location1);
 		this.getPlayer().setCarryCapacity(100);
 		this.getPlayer().setGold(10);
 		this.getPlayer().setHealth(100);
 		this.getPlayer().setMaxHealth(150);
+		this.getPlayer().setXp(0);
+		this.getPlayer().setLevel(1);
 		System.out.println("All set up.");
 	}
 	

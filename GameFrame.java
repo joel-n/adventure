@@ -44,12 +44,15 @@ public class GameFrame extends JFrame {
 	        JTextArea levelbar = new JTextArea("Level: 1",1,1);
 	        levelbar.setEditable(false);
 
-	        
 	        JTextField input = new JTextField("", 30);
+	        
+	        
+	        
 	        input.addKeyListener(new KeyAdapter() {
 	        	public void keyPressed(KeyEvent event) {
 	        		if(event.getKeyCode() == KeyEvent.VK_ENTER) {
-	        		handleInput(input,output);	
+	        		handleInput(input,output);
+	        		updateXpAndLevel(xpbar,levelbar);
 	        		}
 	            }
 	        });
@@ -87,6 +90,11 @@ public class GameFrame extends JFrame {
 	    
 	    public void presentNew(JTextArea output, String string) {
 	    	output.setText(string + "\n" + output.getText());
+	    }
+	    
+	    public void updateXpAndLevel(JTextArea xpbar,JTextArea levelbar) {
+	    	xpbar.setText("XP: " + String.valueOf(this.getGame().getPlayer().getXp()));
+	    	levelbar.setText("Level: " + String.valueOf(this.getGame().getPlayer().getLevel()));
 	    }
 	    
 	    

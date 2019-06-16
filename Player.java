@@ -146,8 +146,16 @@ public class Player {
 		return this.xp;
 	}
 	
-	public int getlevel() {
+	public int getLevel() {
 		return this.level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	public void setXp(int xp) {
+		this.xp = xp;
 	}
 	
 	public void gainXp(int amount) {
