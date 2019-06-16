@@ -85,6 +85,8 @@ public class Game {
 		this.getPlayer().setMaxHealth(150);
 		this.getPlayer().setXp(0);
 		this.getPlayer().setLevel(1);
+		this.getPlayer().setNextLevelLimit(1000);
+		this.getPlayer().setLevelMultiplier(2);
 		System.out.println("All set up.");
 	}
 	
@@ -134,6 +136,7 @@ public class Game {
 			}
 			else {
 			this.getPlayer().setLocation(getEnteredLocation(newLocation));
+			// this.getPlayer().gainXp(510); // line to control xp system and xpBar functionality by moving. 
 			return this.getPlayer().getCurrentLocation().describeYourself();
 			}
 		}

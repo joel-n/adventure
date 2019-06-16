@@ -150,6 +150,22 @@ public class Player {
 		return this.level;
 	}
 	
+	public int getNextLevelLimit() {
+		return this.nextLevelLimit;
+	}
+	
+	public void setNextLevelLimit(int amount) {
+		this.nextLevelLimit = amount;
+	}
+	
+	public int getLevelMultiplier() {
+		return this.levelMultiplier;
+	}
+	
+	public void setLevelMultiplier(int lm) {
+		this.levelMultiplier = lm;
+	}
+	
 	public void setLevel(int level) {
 		this.level = level;
 	}
@@ -160,15 +176,16 @@ public class Player {
 	
 	public void gainXp(int amount) {
 		this.xp = this.getXp() + amount;
-		if(this.getXp() > this.nextLevelLimit) {
+		if(this.getXp() > this.getNextLevelLimit()) {
+			this.setXp(this.getXp()-this.getNextLevelLimit()); // subtraction must take place before calling levelUp();
 			this.levelUp();
 		}
 	}
 	
 	public void levelUp() {
-		this.level = this.level++;
-		this.nextLevelLimit = this.nextLevelLimit + 500*levelMultiplier;
-		this.levelMultiplier = this.levelMultiplier++;
+		this.setLevel(this.getLevel() + 1);
+		this.setNextLevelLimit(this.getNextLevelLimit() + 500*this.getLevelMultiplier());
+		this.setLevelMultiplier(this.getLevelMultiplier() + 1);
 		
 		this.setMaxHealth(this.getMaxHealth() + 50);
 	}

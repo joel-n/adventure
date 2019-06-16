@@ -38,11 +38,16 @@ public class GameFrame extends JFrame {
 	        JTextArea output = new JTextArea("",20,20);
 	        output.setEditable(false);	       
 	        	                
-	        JTextArea xpbar = new JTextArea("XP: 0",1,1);
-	        xpbar.setEditable(false);
+	        JTextArea xp = new JTextArea("",1,1);
+	        xp.setEditable(false);
 	        
-	        JTextArea levelbar = new JTextArea("Level: 1",1,1);
+	        JTextArea levelbar = new JTextArea("",1,1);
 	        levelbar.setEditable(false);
+	        
+	        
+	        XpBar xpbar = new XpBar();
+	              
+	        
 
 	        JTextField input = new JTextField("", 30);
 	        
@@ -52,7 +57,7 @@ public class GameFrame extends JFrame {
 	        	public void keyPressed(KeyEvent event) {
 	        		if(event.getKeyCode() == KeyEvent.VK_ENTER) {
 	        		handleInput(input,output);
-	        		updateXpAndLevel(xpbar,levelbar);
+	        		updateXpAndLevel(xp,levelbar,xpbar);
 	        		}
 	            }
 	        });
@@ -70,8 +75,9 @@ public class GameFrame extends JFrame {
 	        container.add(input, BorderLayout.PAGE_END);
 	        
 	        levelpanel.add(levelbar, BorderLayout.LINE_START);
-	        levelpanel.add(xpbar, BorderLayout.LINE_END);
+	        levelpanel.add(xp, BorderLayout.LINE_END);
 	        
+	        levelpanel.add(xpbar, BorderLayout.CENTER);
 	        
 	        // MESSAGE AT GAME START
 	        output.setText("Welcome to the world of Evalon! \n"
@@ -92,11 +98,13 @@ public class GameFrame extends JFrame {
 	    	output.setText(string + "\n" + output.getText());
 	    }
 	    
-	    public void updateXpAndLevel(JTextArea xpbar,JTextArea levelbar) {
-	    	xpbar.setText("XP: " + String.valueOf(this.getGame().getPlayer().getXp()));
+	    public void updateXpAndLevel(JTextArea xp,JTextArea levelbar, XpBar xpbar) {
+	    	xp.setText("XP: " + String.valueOf(this.getGame().getPlayer().getXp()) + "/" + String.valueOf(this.getGame().getPlayer().getNextLevelLimit()));
 	    	levelbar.setText("Level: " + String.valueOf(this.getGame().getPlayer().getLevel()));
+	    	
+	    	xpbar.setPercent((int) (Math.floor(100*(this.getGame().getPlayer().getXp())/this.getGame().getPlayer().getNextLevelLimit())));
+	    	xpbar.repaint();
 	    }
-	    
 	    
 	    
 	    /*
