@@ -64,13 +64,93 @@ public class Game {
 		
 		Item potion = new Item("potion");
 		this.getPlayer().addItem(potion);
-		Item healthpotion = new Item("health potion");
+		Item healthpotion = new Item("healthpotion");
 		this.getPlayer().addItem(healthpotion);
-		this.getPlayer().setPlayerInitialLocation(location1);
+		this.getPlayer().setLocation(location1);
 		System.out.println("All set up.");
 	}
 	
 	
+	
+	// returns command if found, else returns null
+		public Command getEnteredCommand(String enteredCommand) {
+			return this.getPlayer().getPlayerCommands().get(enteredCommand);
+		}
+		
+		// returns location if found, else returns null
+		public Location getEnteredLocation(String enteredPath) {
+			return this.getPlayer().getCurrentLocation().getPaths().get(enteredPath);
+		}
+		
+		
+		public String moveTo(String newLocation) {
+			if (this.getEnteredLocation(newLocation) == null) {
+				return "You cannot go in that direction.";
+			}
+			else {
+			this.getPlayer().setLocation(getEnteredLocation(newLocation));
+			return this.getPlayer().getCurrentLocation().describeYourself();
+			}
+		}
+		
+		public String look() {
+			return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString());
+		}
+		
+		public String drink(String itemName) {
+			if(this.getPlayer().getItem(itemName) == null) {
+				return "You do not have this item in your inventory.";
+			}
+			else {
+				this.getPlayer().removeItem(itemName);
+				return "You drink " + itemName + ".";
+			}
+		}
+		
+		public String takeItem(String itemName) {
+			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
+				return "There is no " + " in this location.";
+			}
+			else {
+				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
+				this.getPlayer().getCurrentLocation().removeItem(itemName);
+				return "You take " + itemName + ".";
+			}
+		}
+		
+		public String inventory() {
+			return "You have the following items: ".concat(this.getPlayer().getInventory().keySet().toString());
+		}
+		
+		
+		public String help() {
+			return "You can use the commands: ".concat(this.getPlayer().getPlayerCommands().keySet().toString() + ".");
+		}
+		
+		
+		public String executeCommand(String arguments) {
+			try {
+			String[] text = arguments.split(" ");
+			if (getEnteredCommand(text[0]) == null) {
+				return "This is not possible.";
+			}
+			else {
+			switch(text[0]) {
+			case "move": return this.moveTo(text[1]);
+			case "drink": return this.drink(text[1]);
+			case "take": return this.takeItem(text[1]);
+			case "look": return this.look();
+			case "inventory": return this.inventory();
+			case "help": return this.help();
+			default: return "You cannot do that.";
+			}
+			}
+			}
+			catch(Exception e){
+				return "Specify a valid command or an argument.";
+
+			}}
+
 	
 	
 	

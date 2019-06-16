@@ -20,74 +20,7 @@ public class Player {
 		return this.commands;
 	}
 	
-	// returns command if found, else returns null
-	public Command getEnteredCommand(String enteredCommand) {
-		return this.getPlayerCommands().get(enteredCommand);
-	}
 	
-	// returns location if found, else returns null
-	public Location getEnteredLocation(String enteredPath) {
-		return this.getCurrentLocation().getPaths().get(enteredPath);
-	}
-	
-	
-	public String moveTo(String newLocation) {
-		if (this.getEnteredLocation(newLocation) == null) {
-			return "You cannot go in that direction.";
-		}
-		else {
-		this.location = getEnteredLocation(newLocation);
-		return this.getCurrentLocation().describeYourself();
-		}
-	}
-	
-	public String look() {
-		return "You can move in the following directions: ".concat(this.getCurrentLocation().getPaths().keySet().toString());
-	}
-	
-	public String drink(String itemName) {
-		if(this.getItem(itemName) == null) {
-			return "You do not have this item in your inventory.";
-		}
-		else {
-			this.removeItem(this.getItem(itemName));
-			return "You drink " + itemName + ".";
-		}
-	}
-	
-	public String inventory() {
-		return "You have the following items: ".concat(this.getInventory().keySet().toString());
-	}
-	
-	
-	public String help() {
-		return "You can use the commands: ".concat(this.getPlayerCommands().keySet().toString() + ".");
-	}
-	
-	
-	// needs to handle exception if text[1] does not exist 
-	public String executeCommand(String arguments) {
-		try {
-		String[] text = arguments.split(" ");
-		if (getEnteredCommand(text[0]) == null) {
-			return "This is not possible.";
-		}
-		else {
-		switch(text[0]) {
-		case "move": return this.moveTo(text[1]);
-		case "drink": return this.drink(text[1]);
-		case "look": return this.look();
-		case "inventory": return this.inventory();
-		case "help": return this.help();
-		default: return "You cannot do that.";
-		}
-		}
-		}
-		catch(Exception e){
-			return "Specify a valid command or an argument.";
-
-		}}
-
 
 	
 	public void initAndSetCommandStore() {
@@ -103,6 +36,8 @@ public class Player {
 		cmdstore.addCommand(help);
 		Command look = new Command("look", "You look about your position... ");
 		cmdstore.addCommand(look);
+		Command take = new Command("take", "Take an item.");
+		cmdstore.addCommand(take);
 	}
 	
 	
@@ -120,9 +55,8 @@ public class Player {
 		return this.getInventory().get(enteredItem);
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
-	public void removeItem(Item item) {
-		this.getInventory().remove(item);
+	public void removeItem(String itemName) {
+		this.getInventory().remove(itemName);
 	}
 	
 	public HashMap<String, Item> getInventory(){
@@ -144,7 +78,7 @@ public class Player {
 		return this.location;
 	}
 	
-	public void setPlayerInitialLocation(Location location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 	

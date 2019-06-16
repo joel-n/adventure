@@ -28,6 +28,15 @@ public class Location {
 		this.getPlaceInventory().put(item.getName(), item);
 	}
 	
+	public void removeItem(String itemName) {
+		this.getPlaceInventory().remove(itemName);
+	}
+	
+	// returns item if found, else returns null
+	public Item getItem(String enteredItem) {
+		return this.getPlaceInventory().get(enteredItem);
+	}
+	
 	public HashMap<String, Item> getPlaceInventory(){
 		return this.items;
 	}
