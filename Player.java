@@ -7,7 +7,8 @@ public class Player {
 	private Location location;
 	private int gold;
 	private int health;
-	private int carrycapacity;
+	private int maxHealth;
+	private int carryCapacity;
 	private HashMap<String,Item> items;
 	private int xp;
 	private int nextLevelLimit;
@@ -38,6 +39,8 @@ public class Player {
 		cmdstore.addCommand(take);
 		Command drop = new Command("drop", "Drop an item.");
 		cmdstore.addCommand(drop);
+		Command health = new Command("health", "Check your hit points.");
+		cmdstore.addCommand(health);
 	}
 	
 	
@@ -106,10 +109,25 @@ public class Player {
 		return this.health;
 	}
 	
+	public void setHealth(int amount) {
+		this.health = amount;
+	}
+	
+	public int getMaxHealth() {
+		return this.maxHealth;
+	}
+	
+	public void setMaxHealth(int amount) {
+		this.maxHealth = amount;
+	}
+	
 	public void changeHealth(int amount) {
 		if(this.getHealth() + amount < 0) {
 			System.out.println("Game Over");
 			this.gameOver();
+		}
+		else if (this.getHealth() + amount > this.getMaxHealth()) {
+			this.setHealth(this.getMaxHealth());
 		}
 		else {
 			this.health = this.getHealth() + amount;
@@ -117,11 +135,11 @@ public class Player {
 	}
 	
 	public int getCarryCapacity() {
-		return this.carrycapacity;
+		return this.carryCapacity;
 	}
 	
 	public void setCarryCapacity(int cc) {
-		this.carrycapacity = cc;
+		this.carryCapacity = cc;
 	}
 	
 	public int getXp() {

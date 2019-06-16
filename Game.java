@@ -70,10 +70,10 @@ public class Game {
 		this.getPlayer().setInventoryHash(inventory);
 		
 		// CREATING AND ADDING ITEMS TO PLAYER INVENTORY 
-		Item potion = new Item("potion", 1, 100, true);
+		Item potion = new Potion("potion", 1, 100, true, 10);
 		this.getPlayer().addItem(potion);
-		Item healthpotion = new Item("healthpotion", 1, 200, true);
-		this.getPlayer().addItem(healthpotion);
+		Item sword = new Item("sword", 1, 200, true);
+		this.getPlayer().addItem(sword);
 		
 		
 		
@@ -81,6 +81,8 @@ public class Game {
 		this.getPlayer().setLocation(location1);
 		this.getPlayer().setCarryCapacity(100);
 		this.getPlayer().setGold(10);
+		this.getPlayer().setHealth(100);
+		this.getPlayer().setMaxHealth(150);
 		System.out.println("All set up.");
 	}
 	
@@ -100,6 +102,7 @@ public class Game {
 		case "drop": return this.dropItem(text[1]);
 		case "look": return this.look();
 		case "inventory": return this.inventory();
+		case "health": return this.health();
 		case "help": return this.help();
 		default: return "You cannot do that.";
 		}
@@ -153,7 +156,12 @@ public class Game {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
 			}
+			else if (!(this.getPlayer().getItem(itemName) instanceof Potion)) { // if not instance of potion
+				return "You cannot drink this item!";
+			}
 			else {
+				// player's changHealth() manages max health (and minimum health)
+				this.getPlayer().changeHealth(((Potion)this.getPlayer().getItem(itemName)).getHealing());
 				this.getPlayer().removeItem(itemName);
 				return "You drink " + itemName + ".";
 			}
@@ -203,6 +211,15 @@ public class Game {
 						+ "You have " + this.getPlayer().getGold() + " gold.");				
 			}
 
+		}
+		
+		public String health() {
+			if(this.getPlayer().getHealth() == this.getPlayer().getMaxHealth()) {
+				return "You are at maximum health";
+			}
+			else {
+				return "You have " + this.getPlayer().getHealth() + "/" + this.getPlayer().getMaxHealth() + " hit points.";
+			}
 		}
 		
 		// returns the commands available to the player
