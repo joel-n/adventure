@@ -161,6 +161,8 @@ public class Player {
 		this.level = this.level++;
 		this.nextLevelLimit = this.nextLevelLimit + 500*levelMultiplier;
 		this.levelMultiplier = this.levelMultiplier++;
+		
+		this.setMaxHealth(this.getMaxHealth() + 50);
 	}
 	
 	public void gameOver() {
