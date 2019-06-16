@@ -7,6 +7,7 @@ public class Player {
 	private Location location;
 	private int gold;
 	private int health;
+	private int carrycapacity;
 	private HashMap<String,Item> items;
 	private int xp;
 	private int nextLevelLimit;
@@ -19,9 +20,6 @@ public class Player {
 	public CommandStore getPlayerCommands() {
 		return this.commands;
 	}
-	
-	
-
 	
 	public void initAndSetCommandStore() {
 		CommandStore cmdstore = new CommandStore();
@@ -38,6 +36,8 @@ public class Player {
 		cmdstore.addCommand(look);
 		Command take = new Command("take", "Take an item.");
 		cmdstore.addCommand(take);
+		Command drop = new Command("drop", "Drop an item.");
+		cmdstore.addCommand(drop);
 	}
 	
 	
@@ -48,6 +48,7 @@ public class Player {
 	
 	public void addItem(Item item) {
 		this.getInventory().put(item.getName(), item);
+		this.setCarryCapacity(this.getCarryCapacity()-item.getWeight());
 	}
 	
 	// returns item if found, else returns null
@@ -56,7 +57,8 @@ public class Player {
 	}
 	
 	public void removeItem(String itemName) {
-		this.getInventory().remove(itemName);
+		this.setCarryCapacity(this.getCarryCapacity()+this.getItem(itemName).getWeight());
+		this.getInventory().remove(itemName);	
 	}
 	
 	public HashMap<String, Item> getInventory(){
@@ -86,6 +88,10 @@ public class Player {
 		return this.gold;
 	}
 	
+	public void setGold(int amount) {
+		this.gold = amount;
+	}
+	
 	public void changeGold(int amount) {
 		if(this.getGold() + amount < 0) {
 			System.out.println("Not enough money.");
@@ -108,6 +114,14 @@ public class Player {
 		else {
 			this.health = this.getHealth() + amount;
 		}
+	}
+	
+	public int getCarryCapacity() {
+		return this.carrycapacity;
+	}
+	
+	public void setCarryCapacity(int cc) {
+		this.carrycapacity = cc;
 	}
 	
 	public int getXp() {

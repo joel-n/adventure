@@ -67,6 +67,8 @@ public class Game {
 		Item healthpotion = new Item("healthpotion", 1, 200, true);
 		this.getPlayer().addItem(healthpotion);
 		this.getPlayer().setLocation(location1);
+		this.getPlayer().setCarryCapacity(100);
+		this.getPlayer().setGold(10);
 		System.out.println("All set up.");
 	}
 	
@@ -94,7 +96,15 @@ public class Game {
 		}
 		
 		public String look() {
-			return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString());
+			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
+				return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"There are no items in this place.");
+			}
+			else {
+				
+			}
+			return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+		"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString());
 		}
 		
 		public String drink(String itemName) {
@@ -112,6 +122,8 @@ public class Game {
 				return "There is no " + " in this location.";
 			} else if (this.getPlayer().getCurrentLocation().getItem(itemName).isRemovable() == false) {
 				return "You cannot take this item.";
+			} else if (this.getPlayer().getCarryCapacity() < this.getPlayer().getCurrentLocation().getItem(itemName).getWeight()) {
+				return "You cannot carry anymore items.";
 			}
 			else {
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
@@ -120,8 +132,29 @@ public class Game {
 			}
 		}
 		
+		public String dropItem(String itemName) {
+			if(this.getPlayer().getItem(itemName) == null) {
+				return "You do not have this item in your inventory.";
+			}
+			else {
+				this.getPlayer().getCurrentLocation().addItem(this.getPlayer().getItem(itemName));
+				this.getPlayer().removeItem(itemName);
+				return "You drop " + itemName + ".";
+			}
+		}
+		
 		public String inventory() {
-			return "You have the following items: ".concat(this.getPlayer().getInventory().keySet().toString());
+			if(this.getPlayer().getInventory().isEmpty()) {
+				return "You have no items in your inventory." + "\n"
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
+						+ "You have " + this.getPlayer().getGold() + " gold.";	
+			}
+			else {
+			return "You have the following items: ".concat(this.getPlayer().getInventory().keySet().toString() + "\n"
+				+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
+						+ "You have " + this.getPlayer().getGold() + " gold.");				
+			}
+
 		}
 		
 		
@@ -141,6 +174,7 @@ public class Game {
 			case "move": return this.moveTo(text[1]);
 			case "drink": return this.drink(text[1]);
 			case "take": return this.takeItem(text[1]);
+			case "drop": return this.dropItem(text[1]);
 			case "look": return this.look();
 			case "inventory": return this.inventory();
 			case "help": return this.help();
