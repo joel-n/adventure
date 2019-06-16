@@ -7,25 +7,29 @@ public class Game {
 
 	private HashMap<String, Location> world;
 	private Player player;
-	// private GameFrame frame; // might not be needed
 	
-	// define a frame in Game that can be accessed by getFrame()
-	// return methods from a method
+	public Game() {
+		this.initAndSetPlayer();
+		this.getPlayer().initAndSetCommandStore();
+		this.initAndSetWorld();
+	}	
 	
 	public Player getPlayer() {
 		return this.player;
 	}
 	
 	public void initAndSetPlayer() {
-		Player player1 = new Player();
+		Player player1 = new Player("Hero", 0, 150, 150, 100, 0,
+				1000, 2, 1);
 		this.player = player1;
 	}
 	
-	public Game() {
-		this.initAndSetPlayer();
-		this.getPlayer().initAndSetCommandStore();
-		this.initAndSetWorld();
-	}
+	/*
+	 * PLAYER CONSTRUCTOR - LOCATION AND ITEM HASHES ARE AUTOMATICALLY SET BY CALLING CONSTRUCTOR
+	 * Player(String name, int gold, int health, int maxHealth, int carryCapacity, int xp,
+	 * 	 int nextLevelLimit, int levelMultiplier, int level)	
+	 */
+
 	
 	public HashMap<String, Location> getWorld() {
 		return this.world;
@@ -43,58 +47,33 @@ public class Game {
 		HashMap<String, Location> gameWorld = new HashMap<String, Location>();
 		this.world = gameWorld;
 		
-		// CREATING AND ADDING LOCATIONS
-		Location valley = new Location("valley", "Evalon Valley. A green valley with fertile soil.");
+		// CREATING AND ADDING LOCATIONS, LOCATION AND ITEM HASHES ARE AUTOMATICALLY SET BY CALLING CONSTRUCTOR
+		Location valley = new Location("valley", "Evalon Valley. A green valley with fertile soil.",
+				"You cannot go in that direction.");
 		this.addLocation(valley);
-		Location plains = new Location("plains", "West Plains. A desolate plain.");
+		Location plains = new Location("plains", "West Plains. A desolate plain.",
+				"You cannot go in that direction. There is nothing but dust over there.");
 		this.addLocation(plains);
-		Location mountain = new Location("mountain", "Northern Mountains. A labyrinth of razor sharp rocks.");
+		Location mountain = new Location("mountain", "Northern Mountains. A labyrinth of razor sharp rocks.",
+				"You cannot go in that direction. The Mountain is not so easily climbed.");
 		this.addLocation(mountain);
-		Location shore = new Location("shore", "Western Shore. The water is calm.");
+		Location shore = new Location("shore", "Western Shore. The water is calm.",
+				"You cannot go in that direction. There might be dangerous beasts in the water.");
 		this.addLocation(shore);
-		Location woods = new Location("woods", "King's Forest. A bright forest with high pines.");
+		Location woods = new Location("woods", "King's Forest. A bright forest with high pines.",
+				"You cannot go in that direction. Be careful not to get lost in the woods.");
 		this.addLocation(woods);
-		Location hills = new Location("hills", "Evalon hills.");
+		Location hills = new Location("hills", "Evalon hills.",
+				"You cannot go in that direction.");
 		this.addLocation(hills);
 		
-		
-		// SETTING LOCATION HASHMAPS
-		HashMap<String, Item> valleyItems = new HashMap<String, Item>();
-		HashMap<String, Location> valleyPaths = new HashMap<String, Location>();
-		valley.setLocationHashes(valleyPaths, valleyItems);
-		
-		HashMap<String, Item> plainsItems = new HashMap<String, Item>();
-		HashMap<String, Location> plainsPaths = new HashMap<String, Location>();
-		plains.setLocationHashes(plainsPaths, plainsItems);
-		
-		HashMap<String, Item> mountainItems = new HashMap<String, Item>();
-		HashMap<String, Location> mountainPaths = new HashMap<String, Location>();
-		mountain.setLocationHashes(mountainPaths, mountainItems);
-		
-		HashMap<String, Item> shoreItems = new HashMap<String, Item>();
-		HashMap<String, Location> shorePaths = new HashMap<String, Location>();
-		shore.setLocationHashes(shorePaths, shoreItems);
-		
-		HashMap<String, Item> woodsItems = new HashMap<String, Item>();
-		HashMap<String, Location> woodsPaths = new HashMap<String, Location>();
-		woods.setLocationHashes(woodsPaths, woodsItems);
-		
-		HashMap<String, Item> hillsItems = new HashMap<String, Item>();
-		HashMap<String, Location> hillsPaths = new HashMap<String, Location>();
-		hills.setLocationHashes(hillsPaths, hillsItems);
-		
 		// CONNECTING LOCATIONS
-		// DOES NOT MATTER WHICH LOCATION ON WHICH THE METHOD IS CALLED
+		// IT DOES NOT MATTER ON WHICH LOCATION THE METHOD ADDPATHS IS CALLED
 		valley.addPaths(valley, "east", plains, "west");
 		valley.addPaths(valley, "north", mountain, "south");
 		valley.addPaths(valley, "west", shore, "east");
 		valley.addPaths(valley, "south", woods, "north");
 		woods.addPaths(woods, "east", hills, "west");
-		
-		
-		// CREATING AND SETTING PLAYER INVENTORY
-		HashMap<String, Item> inventory = new HashMap<String, Item>();
-		this.getPlayer().setInventoryHash(inventory);
 		
 		// CREATING AND ADDING ITEMS TO PLAYER INVENTORY 
 		Item potion = new Potion("potion", 1, 100, true, 10);
@@ -102,18 +81,9 @@ public class Game {
 		Item sword = new Item("sword", 1, 200, true);
 		this.getPlayer().addItem(sword);
 		
-		
-		
-		// SETTING LOCATION, CARRY CAPACITY, GOLD AMOUNT, HEALTH, MAXHEALTH, XP AND LEVEL
+		// ADDING PLAYER TO THE WORLD
 		this.getPlayer().setLocation(valley);
-		this.getPlayer().setCarryCapacity(100);
-		this.getPlayer().setGold(10);
-		this.getPlayer().setHealth(100);
-		this.getPlayer().setMaxHealth(150);
-		this.getPlayer().setXp(0);
-		this.getPlayer().setLevel(1);
-		this.getPlayer().setNextLevelLimit(1000);
-		this.getPlayer().setLevelMultiplier(2);
+		
 		System.out.println("All set up.");
 	}
 	
@@ -159,7 +129,7 @@ public class Game {
 		// moves player to new location
 		public String moveTo(String newLocation) {
 			if (this.getEnteredLocation(newLocation) == null) {
-				return "You cannot go in that direction.";
+				return this.getPlayer().getCurrentLocation().getOnWrongPathMessage();
 			}
 			else {
 			this.getPlayer().setLocation(getEnteredLocation(newLocation));
@@ -169,17 +139,18 @@ public class Game {
 		}
 		
 		
-		// returns information on available paths and items of the players location
+		// returns description of current location, its available paths and items
 		public String look() {
 			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
-				return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
+						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"There are no items in this place.");
 			}
 			else {
-				
+				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
+						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString());
 			}
-			return "You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
-		"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString());
 		}
 		
 		
@@ -188,7 +159,7 @@ public class Game {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
 			}
-			else if (!(this.getPlayer().getItem(itemName) instanceof Potion)) { // if not instance of potion
+			else if (!(this.getPlayer().getItem(itemName) instanceof Potion)) { // if not of class Potion
 				return "You cannot drink this item!";
 			}
 			else {

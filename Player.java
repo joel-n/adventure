@@ -17,6 +17,23 @@ public class Player {
 	private CommandStore commands;
 	
 
+	public Player(String name, int gold, int health, int maxHealth, int carryCapacity, int xp,
+			int nextLevelLimit, int levelMultiplier, int level) {
+		this.setName(name);
+		this.setGold(gold);
+		this.setHealth(health);
+		this.setMaxHealth(maxHealth);
+		this.setCarryCapacity(carryCapacity);
+		HashMap<String,Item> items = new HashMap<String,Item>();
+		this.setInventoryHash(items);
+		this.setXp(xp);
+		this.setNextLevelLimit(nextLevelLimit);
+		this.setLevelMultiplier(levelMultiplier);
+		this.setLevel(level);
+		this.initAndSetCommandStore();
+	}
+	
+	
 	/////////////////////////////////////////////////////////////////////////// COMMANDS
 	public CommandStore getPlayerCommands() {
 		return this.commands;
@@ -77,7 +94,6 @@ public class Player {
 	public void setName(String newname) {
 		this.name = newname;
 	}
-	
 
 	public Location getCurrentLocation() {
 		return this.location;

@@ -6,12 +6,17 @@ public class Location {
 
 	private String name;
 	private String description;
+	private String onWrongPathMessage;
 	private HashMap<String, Location> paths;
 	private HashMap<String, Item> items;
 	
-	public Location(String name, String description) {
-		this.name = name;
-		this.description = description;
+	public Location(String name, String description, String wrongPathMessage) {
+		this.setName(name);
+		this.setDescription(description);
+		this.setOnWrongPathMessage(wrongPathMessage);
+		HashMap<String, Item> itemHash = new HashMap<String, Item>();
+		HashMap<String, Location> locationHash = new HashMap<String, Location>();
+		setLocationHashes(locationHash, itemHash);
 	}
 	
 	public void setLocationHashes(HashMap<String, Location> pathHash, HashMap<String, Item> itemHash) {
@@ -43,6 +48,22 @@ public class Location {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getOnWrongPathMessage() {
+		return this.onWrongPathMessage;
+	}
+	
+	public void setOnWrongPathMessage(String message) {
+		this.onWrongPathMessage = message;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public HashMap<String, Location> getPaths() {
