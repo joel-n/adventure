@@ -101,6 +101,8 @@ public class Game {
 		case "drink": return this.drink(text[1]);
 		case "take": return this.takeItem(text[1]);
 		case "drop": return this.dropItem(text[1]);
+		case "equip": return this.equipItem(text[1]);
+		case "unequip": return this.unequipItem(text[1]);
 		case "look": return this.look();
 		case "inventory": return this.inventory();
 		case "health": return this.health();
@@ -163,7 +165,7 @@ public class Game {
 				return "You cannot drink this item!";
 			}
 			else {
-				// player's changHealth() manages max health (and minimum health)
+				// player's changeHealth() manages max health (and minimum health)
 				this.getPlayer().changeHealth(((Potion)this.getPlayer().getItem(itemName)).getHealing());
 				this.getPlayer().removeItem(itemName);
 				return "You drink " + itemName + ".";
@@ -185,6 +187,66 @@ public class Game {
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
 				return "You take " + itemName + ". \n"
 						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
+			}
+		}
+		
+		// EQUIP DOES NOT AFFECT CARRIED WEIGHT
+		public String equipItem(String itemName) {
+			if(this.getPlayer().getItem(itemName) == null) {
+				return "You do not have this item in your inventory.";
+			}
+			else {
+				switch (this.getPlayer().getItem(itemName).getClassName()) {
+				case "BodyArmor": this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBodyArmor()); 	// returns equipped item to inventory
+					this.getPlayer().setBodyArmor((BodyArmor) this.getPlayer().getItem(itemName));					// equip new item
+					this.getPlayer().removeEquippedItemFromInventory(itemName);										// remove equipped item from inventory
+					return "You equip " + itemName + ".";
+				case "Headgear": this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getHeadgear());
+					this.getPlayer().setHeadgear((Headgear) this.getPlayer().getItem(itemName));
+					this.getPlayer().removeEquippedItemFromInventory(itemName);
+					return "You equip " + itemName + ".";
+				case "Gloves":this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getGloves());
+					this.getPlayer().setGloves((Gloves) this.getPlayer().getItem(itemName));
+					this.getPlayer().removeEquippedItemFromInventory(itemName);
+					return "You equip " + itemName + ".";
+				case "Boots": this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBoots());
+					this.getPlayer().setBoots((Boots) this.getPlayer().getItem(itemName));
+					this.getPlayer().removeEquippedItemFromInventory(itemName);
+					return "You equip " + itemName + ".";
+				case "Weapon": this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getWeapon());
+					this.getPlayer().setWeapon((Weapon) this.getPlayer().getItem(itemName));
+					this.getPlayer().removeEquippedItemFromInventory(itemName);
+					return "You equip " + itemName + ".";
+				default: return "You cannot equip this item.";
+				}
+			}
+		}
+		
+		
+		// UNEQUIP DOES NOT AFFECT CARRIED WEIGHT		
+		public String unequipItem(String itemName) {
+			if(itemName == this.getPlayer().getBodyArmor().getName()) {
+				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBodyArmor());
+				return "You unequip " + itemName + ".";
+			}
+			else if (itemName == this.getPlayer().getHeadgear().getName()) {
+				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getHeadgear());
+				return "You unequip " + itemName + ".";
+			}
+			else if (itemName == this.getPlayer().getGloves().getName()) {
+				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getGloves());
+				return "You unequip " + itemName + ".";
+			}
+			else if (itemName == this.getPlayer().getBoots().getName()) {
+				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBoots());
+				return "You unequip " + itemName + ".";
+			}
+			else if (itemName == this.getPlayer().getWeapon().getName()) {
+				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getWeapon());
+				return "You unequip " + itemName + ".";
+			}
+			else {
+				return "You cannot unequip an item you are note wearing.";
 			}
 		}
 		
@@ -218,6 +280,8 @@ public class Game {
 
 		}
 		
+		
+		// returns hitpoints
 		public String health() {
 			if(this.getPlayer().getHealth() == this.getPlayer().getMaxHealth()) {
 				return "You are at maximum health";

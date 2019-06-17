@@ -34,4 +34,8 @@ public class Item {
 		return this.removable;
 	}
 	
+	public String getClassName() {
+		return this.getClass().getName();
+	}
+	
 }

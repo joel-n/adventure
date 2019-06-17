@@ -15,6 +15,11 @@ public class Player {
 	private int levelMultiplier;
 	private int level;
 	private CommandStore commands;
+	private BodyArmor bodyArmor;
+	private Headgear headgear;
+	private Boots boots;
+	private Gloves gloves;
+	private Weapon weapon;
 	
 
 	public Player(String name, int gold, int health, int maxHealth, int carryCapacity, int xp,
@@ -58,6 +63,10 @@ public class Player {
 		cmdstore.addCommand(drop);
 		Command health = new Command("health", "Check your hit points.");
 		cmdstore.addCommand(health);
+		Command equip = new Command("equip", "Equip an item.");
+		cmdstore.addCommand(equip);
+		Command unequip = new Command("unequip", "Unequip an item.");
+		cmdstore.addCommand(unequip);
 	}
 	
 	
@@ -209,6 +218,70 @@ public class Player {
 	public void gameOver() {
 		
 	}
+	
+	
+	public BodyArmor getBodyArmor() {
+		return this.bodyArmor;
+	}
+	
+	public void setBodyArmor(BodyArmor bodyArmor) {
+		this.bodyArmor = bodyArmor;
+	}
+	
+	public Headgear getHeadgear() {
+		return this.headgear;
+	}
+	
+	public void setHeadgear(Headgear headgear) {
+		this.headgear = headgear;
+	}
+	
+	public Boots getBoots() {
+		return this.boots;
+	}
+	
+	public void setBoots(Boots boots) {
+		this.boots = boots;
+	}
+	
+	public Gloves getGloves() {
+		return this.gloves;
+	}
+	
+	public void setGloves(Gloves gloves) {
+		this.gloves = gloves;
+	}
+	
+	public Weapon getWeapon() {
+		return this.weapon;
+	}
+	
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+	}
+	
+	// DOES NOT AFFECT CARRYCAPACITY
+	public void addUnequippedItemToInventory(Item item) {
+		this.getInventory().put(item.getName(), item);
+	}
+
+	// DOES NOT AFFECT CARRYCAPACITY	
+	public void removeEquippedItemFromInventory(String itemName) {
+		this.getInventory().remove(itemName);	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
