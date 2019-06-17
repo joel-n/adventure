@@ -115,7 +115,7 @@ public class Game {
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
 		// ADDING ENEMY TO WORLD
-		Enemy enemy1 = new Enemy("enemy", true, "come at me", 50, chestplate, 200);
+		Enemy enemy1 = new Enemy("enemy", true, "Come at me!", 50, chestplate, 200, 10);
 		mountain.addNpc(enemy1);
 		
 		// ADDING PLAYER TO THE WORLD
@@ -133,10 +133,10 @@ public class Game {
 			return "This is not possible.";
 		}
 		else if(this.inBattle() == true) {
-			// this.triggerEnemyAttack()
 			switch(text[0]) {
-			case "attack": return this.attack();
+			case "attack": return this.attack(); // ALSO TRIGGERS ENEMY ATTACK
 			case "escape": return this.runAway();
+			case "health": return this.health();
 			default: return "You cannot do that.";
 			}
 		}
@@ -357,6 +357,10 @@ public class Game {
 		}
 		
 		
+		
+		/////////////////////////////////////////////////////////////////////
+		// ATTACK SYSTEM
+		/////////////////////////////////////////////////////////////////////
 		public String engageEnemy(String enemyName) {
 			if(this.getPlayer().getCurrentLocation().getNpc(enemyName) == null) {
 				return "This person is not here.";
@@ -368,8 +372,6 @@ public class Game {
 				this.setInBattle(true);
 				return "You are now fighting " + enemyName + ".";
 		}
-		
-		
 		
 		public String runAway() {
 			this.setInBattle(false);
@@ -388,12 +390,19 @@ public class Game {
 				return "You defeated " + this.getCurrentEnemy().getName() + ".";
 			}
 			else {
-				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage.";
+				this.triggerEnemyAttack();
+				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n"
+						+ this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.";
 			}
+		}
+		
+		public void triggerEnemyAttack() {
+			this.getPlayer().changeHealth(0-this.getCurrentEnemy().getAttack());
 		}
 		
 		
 		
+		/////////////////////////////////////////////////////////////////////
 		// GET AND SET DEFAULT ARMOR AND WEAPON
 		// GETS EQUIPPED WHENEVER PLAYER UNEQUIPS ITEM AND REMOVED
 		// WHENEVER PLAYER EQUIPS ITEM BUT NOT TO INVENTORY

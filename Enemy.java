@@ -6,13 +6,15 @@ public class Enemy extends Npc {
 	private int health;
 	private Item loot;
 	private int xpYield;
+	private int attack;
 	
 	
-	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield) {
+	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack) {
 		super(name,attackable,talkLine);
 		this.setHealth(health);
 		this.setLoot(lootItem);
 		this.setXpYield(xpYield);
+		this.setAttack(attack);
 	}
 	
 	
@@ -42,6 +44,14 @@ public class Enemy extends Npc {
 	
 	public boolean isDefeated() {
 		return (this.getHealth() <= 0);
+	}
+	
+	public int getAttack() {
+		return this.attack;
+	}
+	
+	public void setAttack(int attack) {
+		this.attack = attack;
 	}
 
 }
