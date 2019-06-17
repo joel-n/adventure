@@ -11,6 +11,8 @@ public class Game {
 	private boolean inBattle;
 	private Enemy currentEnemy;
 	
+	private Spawner spawner;
+	
 	private BodyArmor defaultBodyArmor;
 	private Boots defaultBoots;
 	private Gloves defaultGloves;
@@ -360,7 +362,6 @@ public class Game {
 		
 		/////////////////////////////////////////////////////////////////////
 		// ATTACK SYSTEM
-		/////////////////////////////////////////////////////////////////////
 		public String engageEnemy(String enemyName) {
 			if(this.getPlayer().getCurrentLocation().getNpc(enemyName) == null) {
 				return "This person is not here.";
@@ -400,6 +401,20 @@ public class Game {
 			this.getPlayer().changeHealth(0-this.getCurrentEnemy().getAttack());
 		}
 		
+		
+		/////////////////////////////////////////////////////////////////////		
+		// SPAWN NEW ENEMY AT LOCATION
+		public void spawnEnemy(Location location) {
+			location.addNpc(this.getSpawner().getSpawnedEnemy());
+		}
+		
+		public Spawner getSpawner() {
+			return this.spawner;
+		}
+		
+		public void setSpawner(Spawner spawner) {
+			this.spawner = spawner;
+		}
 		
 		
 		/////////////////////////////////////////////////////////////////////
@@ -446,6 +461,11 @@ public class Game {
 			this.defaultWeapon = weapon;
 		}
 		
+		
+		
+		
+		/////////////////////////////////////////////////////////////////////
+		// HANDLING BATTLE PARAMETERS
 		public boolean inBattle() {
 			return this.inBattle;
 		}
