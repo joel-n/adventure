@@ -88,7 +88,7 @@ public class GameFrame extends JFrame {
 		
 	    public void handleInput(JTextField input, JTextArea output) {
 	    	String argument = input.getText();
-	    	output.setText(argument + "\n" + output.getText() + "\n "); // printing what user wrote directly
+	    	output.setText(argument + "\n \n" + output.getText() + "\n "); // printing what user wrote directly
 	    	
 	    	this.presentNew(output, this.getGame().executeCommand(argument));
 	    	
