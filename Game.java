@@ -77,6 +77,11 @@ public class Game {
 		Location hills = new Location("hills", "Evalon hills.",
 				"You cannot go in that direction.");
 		this.addLocation(hills);
+		Location cave = new Location("cave", "Blood Cave. Few of those who venture here ever return.",
+				"The air smells foul over there, better not go in that direction.");
+		this.addLocation(cave);
+		Location innercave = new Location("innercave", "Blood Cave. This path must lead somewhere.",
+				"Better not go over there.");
 		
 		// CONNECTING LOCATIONS
 		// IT DOES NOT MATTER ON WHICH LOCATION THE METHOD ADDPATHS IS CALLED
@@ -85,7 +90,8 @@ public class Game {
 		valley.addPaths(valley, "west", shore, "east");
 		valley.addPaths(valley, "south", woods, "north");
 		woods.addPaths(woods, "east", hills, "west");
-		
+		mountain.addPaths(mountain, "cave", cave, "exit");
+		cave.addPaths(cave, "inwards", innercave, "entrance");
 		
 		// CREATE EMPTY ARMOR SET FOR GAME START AND UNEQUIPS
 		BodyArmor noBodyArmor = new BodyArmor("unarmored", 0, 0, true, 0);
@@ -188,7 +194,8 @@ public class Game {
 			else {
 				this.getPlayer().setLocation(getNeighbouringPath(enteredPath));
 				this.spawnOnChance(this.getPlayer().getCurrentLocation());
-				return this.getPlayer().getCurrentLocation().describeYourself();
+				return this.getPlayer().getCurrentLocation().describeYourself() + "\n" +
+				"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + ". \n";
 			}
 		}
 		
@@ -403,6 +410,7 @@ public class Game {
 		
 		/////////////////////////////////////////////////////////////////////		
 		// SPAWN NEW ENEMY AT LOCATION
+		// CANNOT SPAWN TWO ENEMIES WITH THE SAME NAME STRING AT THE SAME LOCATION
 		public void spawnEnemy(Location location) {
 			location.addNpc(this.getSpawner().newEnemy());
 		}
