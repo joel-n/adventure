@@ -67,6 +67,11 @@ public class Player {
 		cmdstore.addCommand(equip);
 		Command unequip = new Command("unequip", "Unequip an item.");
 		cmdstore.addCommand(unequip);
+		
+		Command attack = new Command("attack", "Attack an enemy");
+		cmdstore.addCommand(attack);
+		Command escape = new Command("escape", "Escape from battle.");
+		cmdstore.addCommand(escape);
 	}
 	
 	
@@ -200,7 +205,7 @@ public class Player {
 	}
 	
 	public void gainXp(int amount) {
-		this.xp = this.getXp() + amount;
+		this.setXp(this.getXp() + amount);
 		if(this.getXp() > this.getNextLevelLimit()) {
 			this.setXp(this.getXp()-this.getNextLevelLimit()); // subtraction must take place before calling levelUp();
 			this.levelUp();

@@ -8,6 +8,9 @@ public class Game {
 	private HashMap<String, Location> world;
 	private Player player;
 	
+	private boolean inBattle;
+	private Enemy currentEnemy;
+	
 	private BodyArmor defaultBodyArmor;
 	private Boots defaultBoots;
 	private Gloves defaultGloves;
@@ -107,6 +110,14 @@ public class Game {
 		Weapon sword = new Weapon("sword", 10, 200, true, 10, false);
 		valley.addItem(sword);
 		
+		
+		// ENEMY LOOT
+		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
+		
+		// ADDING ENEMY TO WORLD
+		Enemy enemy1 = new Enemy("enemy", true, "come at me", 50, chestplate, 200);
+		mountain.addNpc(enemy1);
+		
 		// ADDING PLAYER TO THE WORLD
 		this.getPlayer().setLocation(valley);
 		
@@ -121,19 +132,27 @@ public class Game {
 		if (getEnteredCommand(text[0]) == null) {
 			return "This is not possible.";
 		}
+		else if(this.inBattle() == true) {
+			switch(text[0]) {
+			case "attack": return this.attack();
+			case "escape": return this.runAway();
+			default: return "You cannot do that.";
+			}
+		}
 		else {
-		switch(text[0]) {
-		case "move": return this.moveTo(text[1]);
-		case "drink": return this.drink(text[1]);
-		case "take": return this.takeItem(text[1]);
-		case "drop": return this.dropItem(text[1]);
-		case "equip": return this.equipItem(text[1]);
-		case "unequip": return this.unequipItem(text[1]);
-		case "look": return this.look();
-		case "inventory": return this.inventory();
-		case "health": return this.health();
-		case "help": return this.help();
-		default: return "You cannot do that.";
+			switch(text[0]) {
+			case "move": return this.moveTo(text[1]);
+			case "drink": return this.drink(text[1]);
+			case "take": return this.takeItem(text[1]);
+			case "drop": return this.dropItem(text[1]);
+			case "equip": return this.equipItem(text[1]);
+			case "unequip": return this.unequipItem(text[1]);
+			case "look": return this.look();
+			case "inventory": return this.inventory();
+			case "health": return this.health();
+			case "help": return this.help();
+			case "attack": return this.engageEnemy(text[1]);
+			default: return "You cannot do that.";
 		}
 		}
 		}
@@ -172,17 +191,19 @@ public class Game {
 			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
 						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
-						"There are no items in this place.");
+						"There are no items in this place. \n" +
+						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + "."  + "\n");
 			}
 			else {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
 						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
-						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString());
+						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString() + "\n" +
+						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ".") + "\n";
 			}
 		}
 		
 		
-		// consumes the item (potion)
+		// consumes the item (Potion)
 		public String drink(String itemName) {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
@@ -364,6 +385,40 @@ public class Game {
 		}
 		
 		
+		public String engageEnemy(String enemyName) {
+			if(this.getPlayer().getCurrentLocation().getNpc(enemyName) == null) {
+				return "This person is not here.";
+			}
+			else if(this.getPlayer().getCurrentLocation().getNpc(enemyName).isAttackable() == false) {
+				return "You cannot attack this person."; // possible later to implement custom "not able to attack this person, too strong/is friend" etc
+			}
+				this.setCurrentEnemy((Enemy) this.getPlayer().getCurrentLocation().getNpc(enemyName));
+				this.setInBattle(true);
+				return "You are now fighting " + enemyName + ".";
+		}
+		
+		
+		
+		public String runAway() {
+			this.setInBattle(false);
+			return "You are no longer in battle.";
+		}
+		
+		public String attack() {
+			this.getCurrentEnemy().setHealth(this.getCurrentEnemy().getHealth()-this.getPlayer().getWeapon().getAttack());
+			if(this.currentEnemy.isDefeated()) {
+				this.setInBattle(false);
+				this.getPlayer().getCurrentLocation().addItem(this.getCurrentEnemy().getLoot());
+				this.getPlayer().gainXp(this.getCurrentEnemy().getXpYield());
+				this.getPlayer().getCurrentLocation().removeNpc(this.getCurrentEnemy().getName());
+				return "You defeated " + this.getCurrentEnemy().getName() + ".";
+			}
+			else {
+				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + "damage.";
+			}
+		}
+		
+		
 		
 		// GET AND SET DEFAULT ARMOR AND WEAPON
 		// GETS EQUIPPED WHENEVER PLAYER UNEQUIPS ITEM AND REMOVED
@@ -408,9 +463,21 @@ public class Game {
 			this.defaultWeapon = weapon;
 		}
 		
+		public boolean inBattle() {
+			return this.inBattle;
+		}
 		
+		public void setInBattle(boolean inBattle) {
+			this.inBattle = inBattle;
+		}
 		
+		public Enemy getCurrentEnemy() {
+			return this.currentEnemy;
+		}
 		
+		public void setCurrentEnemy(Enemy enemy) {
+			this.currentEnemy = enemy;
+		}
 		
 		
 		

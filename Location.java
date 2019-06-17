@@ -9,6 +9,7 @@ public class Location {
 	private String onWrongPathMessage;
 	private HashMap<String, Location> paths;
 	private HashMap<String, Item> items;
+	private HashMap<String, Npc> npcs;
 	
 	public Location(String name, String description, String wrongPathMessage) {
 		this.setName(name);
@@ -16,12 +17,14 @@ public class Location {
 		this.setOnWrongPathMessage(wrongPathMessage);
 		HashMap<String, Item> itemHash = new HashMap<String, Item>();
 		HashMap<String, Location> locationHash = new HashMap<String, Location>();
-		setLocationHashes(locationHash, itemHash);
+		HashMap<String, Npc> npcHash = new HashMap<String, Npc>();
+		setLocationHashes(locationHash, itemHash, npcHash);
 	}
 	
-	public void setLocationHashes(HashMap<String, Location> pathHash, HashMap<String, Item> itemHash) {
+	public void setLocationHashes(HashMap<String, Location> pathHash, HashMap<String, Item> itemHash, HashMap<String, Npc> npcHash) {
 		this.paths = pathHash;
 		this.items = itemHash;
+		this.npcs = npcHash;
 	}
 	
 	public void addPaths(Location location1, String pathName1, Location location2, String pathName2) {
@@ -36,6 +39,7 @@ public class Location {
 	public void removeItem(String itemName) {
 		this.getPlaceInventory().remove(itemName);
 	}
+
 	
 	// returns item if found, else returns null
 	public Item getItem(String enteredItem) {
@@ -44,6 +48,24 @@ public class Location {
 	
 	public HashMap<String, Item> getPlaceInventory(){
 		return this.items;
+	}
+	
+	
+	public HashMap<String, Npc> getLocationNpcs(){
+		return this.npcs;
+	}
+	
+	// returns NPC if found, else returns null	
+	public Npc getNpc(String npcName) {
+		return this.getLocationNpcs().get(npcName);
+	}
+	
+	public void addNpc(Npc npc) {
+		this.getLocationNpcs().put(npc.getName(), npc);
+	}
+	
+	public void removeNpc(String npcName) {
+		this.getLocationNpcs().remove(npcName);
 	}
 	
 	public String getName() {
