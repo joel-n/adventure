@@ -274,27 +274,27 @@ public class Game {
 			if(itemName == "unarmored") {
 				return "You do not have any armor to unequip."; // handles unarmored situation
 			}
-			else if(itemName == this.getPlayer().getBodyArmor().getName()) {
+			else if(itemName.equals(this.getPlayer().getBodyArmor().getName())) {
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBodyArmor());
 				this.getPlayer().setBodyArmor(this.getDefaultBodyArmor());		// set armor to default on unequip
 				return "You unequip " + itemName + ".";
 			}
-			else if (itemName == this.getPlayer().getHeadgear().getName()) {
+			else if (itemName.equals(this.getPlayer().getHeadgear().getName())) {
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getHeadgear());
 				this.getPlayer().setHeadgear(this.getDefaultHeadgear());		// set headgear to default on unequip 
 				return "You unequip " + itemName + ".";
 			}
-			else if (itemName == this.getPlayer().getGloves().getName()) {
+			else if (itemName.equals(this.getPlayer().getGloves().getName())) {
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getGloves());
 				this.getPlayer().setGloves(this.getDefaultGloves());			// set gloves to default on unequip 
 				return "You unequip " + itemName + ".";
 			}
-			else if (itemName == this.getPlayer().getBoots().getName()) {
+			else if (itemName.equals(this.getPlayer().getBoots().getName())) {
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBoots());
 				this.getPlayer().setBoots(this.getDefaultBoots());				// set boots to default on unequip 
 				return "You unequip " + itemName + ".";
 			}
-			else if (itemName == this.getPlayer().getWeapon().getName()) {
+			else if (itemName.equals(this.getPlayer().getWeapon().getName())) {
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getWeapon());
 				this.getPlayer().setWeapon(this.getDefaultWeapon());			// set weapon to default on unequip 
 				return "You unequip " + itemName + ".";
@@ -320,7 +320,7 @@ public class Game {
 				this.getPlayer().getCurrentLocation().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().removeItem(itemName);
 				return "You drop " + itemName + ". \n"
-						+ "You can carry " + this.getPlayer().getCarryCapacity() + "more units of weight.";
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
 			}
 		}
 		
