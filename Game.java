@@ -120,6 +120,9 @@ public class Game {
 		Enemy enemy1 = new Enemy("enemy", true, "Come at me!", 50, chestplate, 200, 10);
 		mountain.addNpc(enemy1);
 		
+		// ADDING SPAWNER TO WORLD
+		this.setSpawner(new BanditSpawner()); 
+		
 		// ADDING PLAYER TO THE WORLD
 		this.getPlayer().setLocation(valley);
 		
@@ -136,7 +139,7 @@ public class Game {
 		}
 		else if(this.inBattle() == true) {
 			switch(text[0]) {
-			case "attack": return this.attack(); // ALSO TRIGGERS ENEMY ATTACK
+			case "attack": return this.attack(); 			// ALSO TRIGGERS ENEMY ATTACK
 			case "escape": return this.runAway();
 			case "health": return this.health();
 			default: return "You cannot do that.";
@@ -144,7 +147,7 @@ public class Game {
 		}
 		else {
 			switch(text[0]) {
-			case "move": return this.moveTo(text[1]);
+			case "move": return this.moveTo(text[1]);		// 20% PROBABILITY OF SPAWNING A BANDIT AT NEW LOCATION
 			case "drink": return this.drink(text[1]);
 			case "take": return this.takeItem(text[1]);
 			case "drop": return this.dropItem(text[1]);
@@ -176,15 +179,16 @@ public class Game {
 		}
 		
 		
-		// moves player to new location
+		// MOVES PLAYER TO NEW LOCATION
+		// 20% PROBABILITY OF SPAWNING A BANDIT 
 		public String moveTo(String enteredPath) {
 			if (this.getNeighbouringPath(enteredPath) == null) {
 				return this.getPlayer().getCurrentLocation().getOnWrongPathMessage();
 			}
 			else {
-			this.getPlayer().setLocation(getNeighbouringPath(enteredPath));
-			// this.getPlayer().gainXp(510); // line to control xp system and xpBar functionality by moving. 
-			return this.getPlayer().getCurrentLocation().describeYourself();
+				this.getPlayer().setLocation(getNeighbouringPath(enteredPath));
+				this.spawnOnChance(this.getPlayer().getCurrentLocation());
+				return this.getPlayer().getCurrentLocation().describeYourself();
 			}
 		}
 		
@@ -400,7 +404,7 @@ public class Game {
 		/////////////////////////////////////////////////////////////////////		
 		// SPAWN NEW ENEMY AT LOCATION
 		public void spawnEnemy(Location location) {
-			location.addNpc(this.getSpawner().getSpawnedEnemy());
+			location.addNpc(this.getSpawner().newEnemy());
 		}
 		
 		public Spawner getSpawner() {
@@ -409,6 +413,13 @@ public class Game {
 		
 		public void setSpawner(Spawner spawner) {
 			this.spawner = spawner;
+		}
+		
+		// 20% CHANCE TO SPAWN A BANDIT AT LOCATION
+		public void spawnOnChance(Location location) {
+			if(Math.random() < 0.20) {
+				this.spawnEnemy(location);
+			}
 		}
 		
 		
