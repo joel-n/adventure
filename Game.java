@@ -171,18 +171,18 @@ public class Game {
 		}
 		
 		// returns location from if players current location found, else returns null
-		public Location getEnteredLocation(String enteredPath) {
+		public Location getNeighbouringPath(String enteredPath) {
 			return this.getPlayer().getCurrentLocation().getPaths().get(enteredPath);
 		}
 		
 		
 		// moves player to new location
-		public String moveTo(String newLocation) {
-			if (this.getEnteredLocation(newLocation) == null) {
+		public String moveTo(String enteredPath) {
+			if (this.getNeighbouringPath(enteredPath) == null) {
 				return this.getPlayer().getCurrentLocation().getOnWrongPathMessage();
 			}
 			else {
-			this.getPlayer().setLocation(getEnteredLocation(newLocation));
+			this.getPlayer().setLocation(getNeighbouringPath(enteredPath));
 			// this.getPlayer().gainXp(510); // line to control xp system and xpBar functionality by moving. 
 			return this.getPlayer().getCurrentLocation().describeYourself();
 			}
