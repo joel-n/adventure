@@ -224,6 +224,14 @@ public class Player {
 		
 	}
 	
+	public String presentEquippedItems() {
+		return "Your equipment: \n"
+				+ "Body: " + this.getBodyArmor().getName() + ". \n"
+				+ "Head: " + this.getHeadgear().getName() + ". \n"
+				+ "Feet: " + this.getBoots().getName() + ". \n"
+				+ "Hands: " + this.getGloves().getName() + ". \n"
+				+ "Weapon: " + this.getWeapon().getName() + ".";
+	}
 	
 	public void switchBodyArmor(String itemName) {
 		if(this.hasBodyArmor()) {

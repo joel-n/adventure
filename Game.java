@@ -193,15 +193,15 @@ public class Game {
 		public String look() {
 			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
-						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"There are no items in this place. \n" +
-						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + "."  + "\n");
+						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ". \n";
 			}
 			else {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
-						"You can move in the following directions: ".concat(this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString() + "\n" +
-						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ".") + "\n";
+						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ". \n";
 			}
 		}
 		
@@ -340,25 +340,20 @@ public class Game {
 		public String health() {
 			if(this.getPlayer().getHealth() == this.getPlayer().getMaxHealth()) {
 				return "You are at maximum health. \n"
-						+ "Your equipment: \n"
-						+ "Body: " + this.getPlayer().getBodyArmor().getName() + ". \n"
-						+ "Head: " + this.getPlayer().getHeadgear().getName() + ". \n"
-						+ "Feet: " + this.getPlayer().getBoots().getName() + ". \n"
-						+ "Hands: " + this.getPlayer().getGloves().getName() + ". \n"
-						+ "Weapon: " + this.getPlayer().getWeapon().getName() + ".";
+						+ this.getPlayer().presentEquippedItems();
 			}
 			else {
-				return "You have " + this.getPlayer().getHealth() + "/" + this.getPlayer().getMaxHealth() + " hit points.";
-				
+				return "You have " + this.getPlayer().getHealth() + "/" + this.getPlayer().getMaxHealth() + " hit points. \n"
+						+ this.getPlayer().presentEquippedItems();
 			}
 		}
 		
 		// returns the commands available to the player
 		public String help() {
-			return "You can use the commands: ".concat(this.getPlayer().getPlayerCommands().keySet().toString() + ".");
+			return "You can use the commands: \n" + this.getPlayer().getPlayerCommands().keySet().toString() + ".";
 		}
 		
-		
+		// ADDING .replace("[", "").replace("]", "") AFTER STRING WOULD REMOVE BRACKETS
 		
 		/////////////////////////////////////////////////////////////////////
 		// ATTACK SYSTEM
