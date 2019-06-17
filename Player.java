@@ -225,6 +225,68 @@ public class Player {
 	}
 	
 	
+	public void switchBodyArmor(String itemName) {
+		if(this.hasBodyArmor()) {
+			this.addUnequippedItemToInventory(this.getBodyArmor());				// if not default armor, add it to inventory
+		}
+			this.setBodyArmor((BodyArmor) this.getItem(itemName));				// equip new item
+			this.removeEquippedItemFromInventory(itemName);						// remove equipped item from inventory
+		}
+	
+	public void switchHeadgear(String itemName) {
+		if(this.hasHeadgear()) {
+			this.addUnequippedItemToInventory(this.getHeadgear());
+		}
+			this.setHeadgear((Headgear) this.getItem(itemName));
+			this.removeEquippedItemFromInventory(itemName);
+		}
+	
+	public void switchGloves(String itemName) {
+		if(this.hasGloves()) {
+			this.addUnequippedItemToInventory(this.getGloves());
+		}
+		this.setGloves((Gloves) this.getItem(itemName));
+		this.removeEquippedItemFromInventory(itemName);
+	}
+	
+	public void switchBoots(String itemName) {
+		if(this.hasBoots()) {
+			this.addUnequippedItemToInventory(this.getBoots());
+		}
+		this.setBoots((Boots) this.getItem(itemName));
+		this.removeEquippedItemFromInventory(itemName);
+	}
+	
+	public void switchWeapon(String itemName) {
+		if(this.hasWeapon()) {
+			this.addUnequippedItemToInventory(this.getWeapon());
+		}
+		this.setWeapon((Weapon) this.getItem(itemName));
+		this.removeEquippedItemFromInventory(itemName);
+	}
+	
+	
+	
+	public boolean hasBodyArmor() {
+		return (!(this.getBodyArmor().getName().equals("unarmored")));
+	}
+	
+	public boolean hasGloves() {
+		return (!(this.getGloves().getName().equals("unarmored")));
+	}
+	
+	public boolean hasBoots() {
+		return (!(this.getBoots().getName().equals("unarmored")));
+	}
+	
+	public boolean hasHeadgear() {
+		return (!(this.getHeadgear().getName().equals("unarmored")));
+	}
+	
+	public boolean hasWeapon() {
+		return (!(this.getWeapon().getName().equals("unarmored")));
+	}
+	
 	public BodyArmor getBodyArmor() {
 		return this.bodyArmor;
 	}

@@ -133,6 +133,7 @@ public class Game {
 			return "This is not possible.";
 		}
 		else if(this.inBattle() == true) {
+			// this.triggerEnemyAttack()
 			switch(text[0]) {
 			case "attack": return this.attack();
 			case "escape": return this.runAway();
@@ -223,7 +224,7 @@ public class Game {
 		// carry capacity managed in player's addItem method
 		public String takeItem(String itemName) {
 			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
-				return "There is no " + " in this location.";
+				return "There is no " + itemName + " in this location.";
 			} else if (this.getPlayer().getCurrentLocation().getItem(itemName).isRemovable() == false) {
 				return "You cannot take this item.";
 			} else if (this.getPlayer().getCarryCapacity() < this.getPlayer().getCurrentLocation().getItem(itemName).getWeight()) {
@@ -244,47 +245,22 @@ public class Game {
 			}
 			else {
 				switch (this.getPlayer().getItem(itemName).getClassName()) {
-				
-				case "game.BodyArmor":
-					if(this.getPlayer().getBodyArmor().getName() != "unarmored") {
-						this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBodyArmor());		// if not default armor, add it to inventory
-					}
-						this.getPlayer().setBodyArmor((BodyArmor) this.getPlayer().getItem(itemName));			// equip new item
-						this.getPlayer().removeEquippedItemFromInventory(itemName);								// remove equipped item from inventory
+					case "game.BodyArmor":
+						this.getPlayer().switchBodyArmor(itemName);					
 						return "You equip " + itemName + ".";
-				case "game.Headgear":
-					if(this.getPlayer().getHeadgear().getName() != "unarmored") {
-						this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getHeadgear());
-					}
-						this.getPlayer().setHeadgear((Headgear) this.getPlayer().getItem(itemName));
-						this.getPlayer().removeEquippedItemFromInventory(itemName);
+					case "game.Headgear":
+						this.getPlayer().switchHeadgear(itemName);
 						return "You equip " + itemName + ".";
-					
-				case "game.Gloves":
-					if(this.getPlayer().getGloves().getName() != "unarmored") {
-						this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getGloves());
-					}
-					this.getPlayer().setGloves((Gloves) this.getPlayer().getItem(itemName));
-					this.getPlayer().removeEquippedItemFromInventory(itemName);
-					return "You equip " + itemName + ".";
-					
-				case "game.Boots":
-					if(this.getPlayer().getBoots().getName() != "unarmored") {
-						this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBoots());
-					}
-					this.getPlayer().setBoots((Boots) this.getPlayer().getItem(itemName));
-					this.getPlayer().removeEquippedItemFromInventory(itemName);
-					return "You equip " + itemName + ".";
-					
-				case "game.Weapon":
-					if(this.getPlayer().getWeapon().getName() != "unarmored") {
-						this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getWeapon());
-					}
-					this.getPlayer().setWeapon((Weapon) this.getPlayer().getItem(itemName));
-					this.getPlayer().removeEquippedItemFromInventory(itemName);
-					return "You equip " + itemName + ".";
-					
-				default: return "You cannot equip this item.";
+					case "game.Gloves":
+						this.getPlayer().switchGloves(itemName);
+						return "You equip " + itemName + ".";
+					case "game.Boots":
+						this.getPlayer().switchBoots(itemName);
+						return "You equip " + itemName + ".";
+					case "game.Weapon":
+						this.getPlayer().switchWeapon(itemName);
+						return "You equip " + itemName + ".";
+					default: return "You cannot equip this item.";
 				}
 			}
 		}
@@ -327,10 +303,6 @@ public class Game {
 		
 		
 		
-		
-		
-		
-		
 		// player drops an item to the location
 		// carry capacity managed in player's removeItem method
 		public String dropItem(String itemName) {
@@ -362,7 +334,7 @@ public class Game {
 		}
 		
 		
-		// returns hitpoints
+		// returns hitpoints and equipped items
 		public String health() {
 			if(this.getPlayer().getHealth() == this.getPlayer().getMaxHealth()) {
 				return "You are at maximum health. \n"
@@ -406,15 +378,17 @@ public class Game {
 		
 		public String attack() {
 			this.getCurrentEnemy().setHealth(this.getCurrentEnemy().getHealth()-this.getPlayer().getWeapon().getAttack());
-			if(this.currentEnemy.isDefeated()) {
+			if(this.getCurrentEnemy().isDefeated()) {
 				this.setInBattle(false);
-				this.getPlayer().getCurrentLocation().addItem(this.getCurrentEnemy().getLoot());
+				if(this.getCurrentEnemy().getLoot() != null) {
+					this.getPlayer().getCurrentLocation().addItem(this.getCurrentEnemy().getLoot());
+				}
 				this.getPlayer().gainXp(this.getCurrentEnemy().getXpYield());
 				this.getPlayer().getCurrentLocation().removeNpc(this.getCurrentEnemy().getName());
 				return "You defeated " + this.getCurrentEnemy().getName() + ".";
 			}
 			else {
-				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + "damage.";
+				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage.";
 			}
 		}
 		
