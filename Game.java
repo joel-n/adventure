@@ -149,6 +149,7 @@ public class Game {
 			switch(text[0]) {
 			case "attack": return this.attack(); 			// ALSO TRIGGERS ENEMY ATTACK
 			case "escape": return this.runAway();
+			case "help": return this.help();
 			default: return "You cannot do that.";
 			}
 		}
@@ -355,7 +356,12 @@ public class Game {
 		
 		// returns the commands available to the player
 		public String help() {
-			return "You can use the commands: \n" + this.getPlayer().getPlayerCommands().keySet().toString() + ".";
+			if(this.inBattle()) {
+				return "You can use the commands [attack] and [escape] while in battle.";
+			}
+			else {
+				return "You can use the commands: \n" + this.getPlayer().getPlayerCommands().keySet().toString() + ".";
+			}
 		}
 		
 		// ADDING .replace("[", "").replace("]", "") AFTER STRING WOULD REMOVE BRACKETS
