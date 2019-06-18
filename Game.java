@@ -147,7 +147,6 @@ public class Game {
 			switch(text[0]) {
 			case "attack": return this.attack(); 			// ALSO TRIGGERS ENEMY ATTACK
 			case "escape": return this.runAway();
-			case "health": return this.health();
 			default: return "You cannot do that.";
 			}
 		}
@@ -161,7 +160,7 @@ public class Game {
 			case "unequip": return this.unequipItem(text[1]);
 			case "look": return this.look();
 			case "inventory": return this.inventory();
-			case "health": return this.health();
+			case "equipment": return this.equipment();
 			case "help": return this.help();
 			case "attack": return this.engageEnemy(text[1]);
 			default: return "You cannot do that.";
@@ -347,16 +346,9 @@ public class Game {
 		}
 		
 		
-		// returns hitpoints and equipped items
-		public String health() {
-			if(this.getPlayer().getHealth() == this.getPlayer().getMaxHealth()) {
-				return "You are at maximum health. \n"
-						+ this.getPlayer().presentEquippedItems();
-			}
-			else {
-				return "You have " + this.getPlayer().getHealth() + "/" + this.getPlayer().getMaxHealth() + " hit points. \n"
-						+ this.getPlayer().presentEquippedItems();
-			}
+		// display equipped items
+		public String equipment() {
+			return this.getPlayer().presentEquippedItems();
 		}
 		
 		// returns the commands available to the player

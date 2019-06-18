@@ -61,8 +61,8 @@ public class Player {
 		cmdstore.addCommand(take);
 		Command drop = new Command("drop", "Drop an item.");
 		cmdstore.addCommand(drop);
-		Command health = new Command("health", "Check your hit points.");
-		cmdstore.addCommand(health);
+		Command equipment = new Command("equipment", "Display equipped items.");
+		cmdstore.addCommand(equipment);
 		Command equip = new Command("equip", "Equip an item.");
 		cmdstore.addCommand(equip);
 		Command unequip = new Command("unequip", "Unequip an item.");

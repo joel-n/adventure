@@ -48,7 +48,10 @@ public class GameFrame extends JFrame {
 	        
 	        XpBar xpbar = new XpBar();
 	              
-	        
+	        HealthBar healthbar = new HealthBar();
+	        JTextField healthtext = new JTextField("");
+	        healthtext.setOpaque(false);
+	        healthtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
 	        JTextField input = new JTextField("", 30);
 	        
@@ -59,10 +62,12 @@ public class GameFrame extends JFrame {
 	        		if(event.getKeyCode() == KeyEvent.VK_ENTER) {
 	        		handleInput(input,output);
 	        		updateXpAndLevel(xp,levelbar,xpbar);
+	        		updateHealthBar(healthbar, healthtext);
 	        		}
 	            }
 	        });
 	        
+	                
 
 	        //Display the window.
 	        frame.pack();
@@ -79,11 +84,13 @@ public class GameFrame extends JFrame {
 	        levelpanel.add(xp, BorderLayout.LINE_END);
 	        
 	        levelpanel.add(xpbar, BorderLayout.CENTER);
+	        levelpanel.add(healthbar, BorderLayout.PAGE_END);
+	        healthbar.add(healthtext, BorderLayout.PAGE_END);
 	        
 	        // MESSAGE AT GAME START
 	        output.setText("Welcome to the world of Evalon! \n"
 	        		+ "Type \"help\" and press Enter to get a list of available commands. ");
-
+	        
 	    }
 		
 	    public void handleInput(JTextField input, JTextArea output) {
@@ -105,6 +112,12 @@ public class GameFrame extends JFrame {
 	    	
 	    	xpbar.setPercent((int) (Math.floor(100*(this.getGame().getPlayer().getXp())/this.getGame().getPlayer().getNextLevelLimit())));
 	    	xpbar.repaint();
+	    }
+	    
+	    public void updateHealthBar(HealthBar healthbar, JTextField healthtext) {
+	    	healthbar.setPercent((int) (Math.floor(100*(this.getGame().getPlayer().getHealth())/this.getGame().getPlayer().getMaxHealth())));
+	    	healthtext.setText("Health: " + this.getGame().getPlayer().getHealth() +"/" +this.getGame().getPlayer().getMaxHealth());
+	    	healthbar.repaint();
 	    }
 	    
 	    
