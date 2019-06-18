@@ -41,15 +41,20 @@ public class GameFrame extends JFrame {
 	        	                
 	        JTextArea xp = new JTextArea("",1,1);
 	        xp.setEditable(false);
+	        xp.setOpaque(false);
+	        xp.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        
 	        JTextArea levelbar = new JTextArea("",1,1);
 	        levelbar.setEditable(false);
+	        levelbar.setOpaque(false);
+	        levelbar.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        
 	        
 	        XpBar xpbar = new XpBar();
 	              
 	        HealthBar healthbar = new HealthBar();
 	        JTextField healthtext = new JTextField("");
+	        healthtext.setEditable(false);
 	        healthtext.setOpaque(false);
 	        healthtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
@@ -80,10 +85,13 @@ public class GameFrame extends JFrame {
 	        container.add(output, BorderLayout.CENTER);
 	        container.add(input, BorderLayout.PAGE_END);
 	        
-	        levelpanel.add(levelbar, BorderLayout.LINE_START);
-	        levelpanel.add(xp, BorderLayout.LINE_END);
+
 	        
 	        levelpanel.add(xpbar, BorderLayout.CENTER);
+	        
+	        xpbar.add(levelbar, BorderLayout.LINE_START);
+	        xpbar.add(xp, BorderLayout.LINE_END);
+	        
 	        levelpanel.add(healthbar, BorderLayout.PAGE_END);
 	        healthbar.add(healthtext, BorderLayout.PAGE_END);
 	        

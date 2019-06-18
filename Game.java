@@ -8,11 +8,13 @@ public class Game {
 	private HashMap<String, Location> world;
 	private Player player;
 	
+	// battle parameters
 	private boolean inBattle;
 	private Enemy currentEnemy;
 	
 	private Spawner spawner;
 	
+	// default armor/weapon slots
 	private BodyArmor defaultBodyArmor;
 	private Boots defaultBoots;
 	private Gloves defaultGloves;
