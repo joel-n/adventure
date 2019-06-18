@@ -14,9 +14,10 @@ public class XpBar extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawRect(0,0,600,25);
+		g.drawRect(0,0,600,24);
 		g.setColor(Color.BLUE);
-		g.fillRect(0, 0, 6*percent, 25);
+		g.fillRect(0, 0, 6*percent, 24);
+		g.fillOval(6*percent-18, 0, 24, 24);
 	}
 	
 	public void setPercent(int percent) {
