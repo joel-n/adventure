@@ -274,21 +274,22 @@ public class Game {
 				switch (this.getPlayer().getItem(itemName).getClassName()) {
 					case "game.BodyArmor":
 						this.getPlayer().switchBodyArmor(itemName);					
-						return "You equip " + itemName + ".";
+						break;
 					case "game.Headgear":
 						this.getPlayer().switchHeadgear(itemName);
-						return "You equip " + itemName + ".";
+						break;
 					case "game.Gloves":
 						this.getPlayer().switchGloves(itemName);
-						return "You equip " + itemName + ".";
+						break;
 					case "game.Boots":
 						this.getPlayer().switchBoots(itemName);
-						return "You equip " + itemName + ".";
+						break;
 					case "game.Weapon":
 						this.getPlayer().switchWeapon(itemName);
-						return "You equip " + itemName + ".";
+						break;
 					default: return "You cannot equip this item.";
 				}
+				return "You equip " + itemName + ".";
 			}
 		}
 		
