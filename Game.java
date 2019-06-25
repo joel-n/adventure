@@ -166,6 +166,7 @@ public class Game {
 			case "equipment": return this.equipment();
 			case "help": return this.help();
 			case "attack": return this.engageEnemy(text[1]);
+			case "talk": return this.talk(text[1]);
 			default: return "You cannot do that.";
 		}
 		}
@@ -363,6 +364,7 @@ public class Game {
 		
 		
 		// display equipped items
+		// ADDING .replace("[", "").replace("]", "") AFTER STRING WOULD REMOVE BRACKETS
 		public String equipment() {
 			return this.getPlayer().presentEquippedItems();
 		}
@@ -377,7 +379,16 @@ public class Game {
 			}
 		}
 		
-		// ADDING .replace("[", "").replace("]", "") AFTER STRING WOULD REMOVE BRACKETS
+		
+		public String talk(String npcName) {
+			if(this.getPlayer().getCurrentLocation().getNpc(npcName) == null) {
+				return "This person is not here.";
+			}
+			else {
+				return npcName + " says: " + this.getPlayer().getCurrentLocation().getNpc(npcName).getTalkLine();
+			}
+		}
+		
 		
 		/////////////////////////////////////////////////////////////////////
 		// ATTACK SYSTEM

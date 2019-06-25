@@ -67,6 +67,8 @@ public class Player {
 		cmdstore.addCommand(equip);
 		Command unequip = new Command("unequip", "Unequip an item.");
 		cmdstore.addCommand(unequip);
+		Command talk = new Command("talk", "Talk to a person.");
+		cmdstore.addCommand(talk);
 		
 		Command attack = new Command("attack", "Attack an enemy");
 		cmdstore.addCommand(attack);
