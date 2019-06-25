@@ -204,11 +204,23 @@ public class Game {
 		
 		// returns description of current location, its available paths and items
 		public String look() {
-			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
+			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty() && this.getPlayer().getCurrentLocation().getLocationNpcs().isEmpty()) {
+				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
+						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"There are no items in this place. \n" +
+						"There is no one else here. \n";
+			}
+			else if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty()) {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
 						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"There are no items in this place. \n" +
 						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ". \n";
+			}
+			else if(this.getPlayer().getCurrentLocation().getLocationNpcs().isEmpty()) {
+				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
+						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
+						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString() + "\n" +
+						"There is no one else here. \n";
 			}
 			else {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
