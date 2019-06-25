@@ -2,12 +2,10 @@ package game;
 
 public class Room extends Location {
 	
-	public Room(String name, String description) {
-		super(name,description);
+	public Room(String name, String description, String wrongPathMessage) {
+		super(name,description,wrongPathMessage);
 	}
 	
-	public void doCommand(String string){
-		
-	}
+
 
 }
