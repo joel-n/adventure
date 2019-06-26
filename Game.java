@@ -15,6 +15,10 @@ public class Game {
 	private Spawner npcSpawner;
 	private Spawner itemSpawner;
 	
+	// looting
+	private boolean isLooting;
+	private Chest currentChest;
+	
 	// default armor/weapon slots
 	private BodyArmor defaultBodyArmor;
 	private Boots defaultBoots;
@@ -121,6 +125,16 @@ public class Game {
 		Weapon sword = new Weapon("sword", 10, 200, true, 10, false);
 		valley.addItem(sword);
 		
+		Potion potion2 = new Potion("largepotion", 2, 200, true, 25);
+		Potion potion3 = new Potion("stuckpotion", 2, 200, false, 25);
+		Potion potion4 = new Potion("heavypotion", 2000, 200, true, 25);
+		
+		Chest chest = new Chest("chest", 50, 100, false);
+		valley.addItem(chest);
+		chest.addItem(potion2);
+		chest.addItem(potion3);
+		chest.addItem(potion4);
+		
 		
 		// ENEMY LOOT
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
@@ -154,6 +168,21 @@ public class Game {
 			default: return "You cannot do that.";
 			}
 		}
+		else if(this.isLooting() == true) {
+			switch(text[0]) {
+			case "take": return this.takeChestItem(text[1]);
+			case "place": return this.placeItemInChest(text[1]);
+			case "look": return this.look();
+			case "equip": return this.equipItem(text[1]);
+			case "unequip": return this.unequipItem(text[1]);
+			case "inventory": return this.inventory();
+			case "equipment": return this.equipment();
+			case "drink": return this.drink(text[1]);
+			case "exit": return this.exitChest();
+			case "help": return this.help();
+			default: return "You cannot do that.";
+			}
+		}
 		else {
 			switch(text[0]) {
 			case "move": return this.moveTo(text[1]);		// 20% PROBABILITY OF SPAWNING A BANDIT AT NEW LOCATION
@@ -166,6 +195,7 @@ public class Game {
 			case "inventory": return this.inventory();
 			case "equipment": return this.equipment();
 			case "help": return this.help();
+			case "loot": return this.loot(text[1]);
 			case "attack": return this.engageEnemy(text[1]);
 			case "talk": return this.talk(text[1]);
 			default: return "You cannot do that.";
@@ -206,7 +236,10 @@ public class Game {
 		
 		// returns description of current location, its available paths and items
 		public String look() {
-			if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty() && this.getPlayer().getCurrentLocation().getLocationNpcs().isEmpty()) {
+			if(this.isLooting() == true) {
+				return this.getCurrentChest().getName() + " contains: "	+ this.getCurrentChest().getContent().keySet().toString() + ".";
+			}
+			else if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty() && this.getPlayer().getCurrentLocation().getLocationNpcs().isEmpty()) {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
 						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"There are no items in this place. \n" +
@@ -268,6 +301,66 @@ public class Game {
 						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
 			}
 		}
+		
+		
+		public String loot(String chestName) {
+			if(this.getPlayer().getCurrentLocation().getItem(chestName) == null) {
+				return "This item is not here.";
+			}
+			else if(!(this.getPlayer().getCurrentLocation().getItem(chestName).getClassName().equals("game.Chest"))) {
+				return "You cannot loot this object.";
+			}
+			else {
+				this.setIsLooting(true);
+				this.setCurrentChest((Chest) this.getPlayer().getCurrentLocation().getItem(chestName));
+				return chestName + " contains: "
+						+ ((Chest) this.getPlayer().getCurrentLocation().getItem(chestName)).getContent().keySet().toString() + ".";
+			}
+		}
+		
+		public String takeChestItem(String itemName) {
+			if(this.getCurrentChest().getItem(itemName) == null) {
+				return "There is no " + itemName + " in " + this.getCurrentChest().getName() + ".";
+			} else if (this.getCurrentChest().getItem(itemName).isRemovable() == false) {
+				return "You cannot take this item.";
+			} else if (this.getPlayer().getCarryCapacity() < this.getCurrentChest().getItem(itemName).getWeight()) {
+				return "This item is to heavy, drop some items you don't want to carry.";
+			}
+			else {
+				this.getPlayer().addItem(this.getCurrentChest().getItem(itemName));
+				this.getCurrentChest().removeItem(itemName);
+				return "You take " + itemName + ". \n"
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
+						+ this.getCurrentChest().getName() + " now contains: "
+						+ this.getCurrentChest().getContent().keySet().toString() + ".";
+			}
+		}
+		
+		public String placeItemInChest(String itemName) {
+			if(this.getPlayer().getItem(itemName) == null) {
+				return "You do not have this item in your inventory.";
+			}
+			else {
+				this.getCurrentChest().addItem(this.getPlayer().getItem(itemName));
+				this.getPlayer().removeItem(itemName);
+				return "You put " + itemName + " in " + this.getCurrentChest().getName() + ". \n"
+							+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
+				}
+		}
+		
+		public String exitChest() {
+			if (this.isLooting() == false) {
+				return "You are not looting";
+			}
+			else {
+				this.setIsLooting(false);
+				return "You are no longer looting.";
+			}
+		}
+		
+		
+		
+		
 		
 		// EQUIP DOES NOT AFFECT CARRIED WEIGHT
 		public String equipItem(String itemName) {
@@ -538,9 +631,22 @@ public class Game {
 		
 		
 		
+		/////////////////////////////////////////////////////////////////////
+		// HANDLING LOOTING PARAMETERS
+		public boolean isLooting() {
+			return this.isLooting;
+		}
 		
+		public void setIsLooting(boolean isLooting) {
+			this.isLooting = isLooting;
+		}
 		
+		public Chest getCurrentChest() {
+			return this.currentChest;
+		}
 		
-		
+		public void setCurrentChest(Chest chest) {
+			this.currentChest = chest;
+		}
 		
 }

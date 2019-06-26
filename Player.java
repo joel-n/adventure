@@ -70,6 +70,13 @@ public class Player {
 		Command talk = new Command("talk", "Talk to a person.");
 		cmdstore.addCommand(talk);
 		
+		Command place = new Command("place", "Place an an item in a chest.");
+		cmdstore.addCommand(place);
+		Command exit = new Command("exit", "Stop looting.");
+		cmdstore.addCommand(exit);
+		Command loot = new Command("loot", "Loot a chest.");
+		cmdstore.addCommand(loot);
+		
 		Command attack = new Command("attack", "Attack an enemy");
 		cmdstore.addCommand(attack);
 		Command escape = new Command("escape", "Escape from battle.");
