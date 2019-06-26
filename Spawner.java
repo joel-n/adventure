@@ -5,5 +5,6 @@ public abstract class Spawner {
 	public Spawner() {
 	}
 	
-	abstract Enemy newEnemy();
+	
+	abstract Object newObject();
 }

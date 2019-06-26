@@ -12,7 +12,8 @@ public class Game {
 	private boolean inBattle;
 	private Enemy currentEnemy;
 	
-	private Spawner spawner;
+	private Spawner npcSpawner;
+	private Spawner itemSpawner;
 	
 	// default armor/weapon slots
 	private BodyArmor defaultBodyArmor;
@@ -125,11 +126,11 @@ public class Game {
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
 		// ADDING ENEMY TO WORLD
-		Enemy enemy1 = new Enemy("enemy", true, "Come at me!", 50, chestplate, 200, 10);
+		Enemy enemy1 = new Enemy("Enemy", true, "Come at me!", 50, chestplate, 200, 10);
 		mountain.addNpc(enemy1);
 		
 		// ADDING SPAWNER TO WORLD
-		this.setSpawner(new BanditSpawner()); 
+		this.setNpcSpawner(new BanditSpawner()); 
 		
 		// ADDING PLAYER TO THE WORLD
 		this.getPlayer().setLocation(valley);
@@ -196,7 +197,7 @@ public class Game {
 			}
 			else {
 				this.getPlayer().setLocation(getNeighbouringPath(enteredPath));
-				this.spawnOnChance(this.getPlayer().getCurrentLocation());
+				this.spawnNpcOnChance(this.getPlayer().getCurrentLocation());
 				return this.getPlayer().getCurrentLocation().describeYourself() + "\n" +
 				"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + ". \n";
 			}
@@ -250,6 +251,8 @@ public class Game {
 		
 		// player takes an item from the location
 		// carry capacity managed in player's addItem method
+		
+		// TO DO: TAKE DUPLICATE ITEMS??
 		public String takeItem(String itemName) {
 			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
 				return "There is no " + itemName + " in this location.";
@@ -436,19 +439,32 @@ public class Game {
 		// SPAWN NEW ENEMY AT LOCATION
 		// CANNOT SPAWN TWO ENEMIES WITH THE SAME NAME STRING AT THE SAME LOCATION
 		public void spawnEnemy(Location location) {
-			location.addNpc(this.getSpawner().newEnemy());
+			location.addNpc((Npc) this.getNpcSpawner().newObject());
 		}
 		
-		public Spawner getSpawner() {
-			return this.spawner;
+		public void spawnItem(Location location) {
+			location.addItem((Item) this.getPotionSpawner().newObject());
 		}
 		
-		public void setSpawner(Spawner spawner) {
-			this.spawner = spawner;
+		public Spawner getNpcSpawner() {
+			return this.npcSpawner;
 		}
+		
+		public void setNpcSpawner(BanditSpawner spawner) {
+			this.npcSpawner = spawner;
+		}
+		
+		public Spawner getPotionSpawner() {
+			return this.itemSpawner;
+		}
+		
+		public void setPotionSpawner(PotionSpawner spawner) {
+			this.itemSpawner = spawner;
+		}
+		
 		
 		// 20% CHANCE TO SPAWN A BANDIT AT LOCATION
-		public void spawnOnChance(Location location) {
+		public void spawnNpcOnChance(Location location) {
 			if(Math.random() < 0.20) {
 				this.spawnEnemy(location);
 			}
