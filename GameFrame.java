@@ -5,6 +5,8 @@ import game.Game;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -25,7 +27,7 @@ public class GameFrame extends JFrame {
 	// FRAME
 		public void createAndShowGUI() {
 	        //Create and set up the window.
-	        JFrame frame = new JFrame("Frame");
+	        JFrame frame = new JFrame("Evalon");
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        frame.setResizable(false);
 
@@ -72,7 +74,27 @@ public class GameFrame extends JFrame {
 	            }
 	        });
 	        
-	                
+	        
+	        JPanel buttonPanel = new JPanel();
+	        
+	        JButton inventoryButton = new JButton("Inventory");
+	        inventoryButton.setPreferredSize(new Dimension(100, 50));
+	        inventoryButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent event) {
+	        		handleInputForButton(input,output,"inventory");
+	        	}
+	        });
+	        
+	        JButton equipmentButton = new JButton("Equipment");
+	        equipmentButton.setPreferredSize(new Dimension(100, 80));
+	        equipmentButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent event) {
+	        		handleInputForButton(input,output,"equipment");
+	        	}
+	        });
+	        
+	        
+	        
 
 	        //Display the window.
 	        frame.pack();
@@ -85,7 +107,11 @@ public class GameFrame extends JFrame {
 	        container.add(output, BorderLayout.CENTER);
 	        container.add(input, BorderLayout.PAGE_END);
 	        
-
+	        container.add(buttonPanel, BorderLayout.LINE_START);
+	        
+	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+	        buttonPanel.add(inventoryButton);
+	        buttonPanel.add(equipmentButton);
 	        
 	        levelpanel.add(xpbar, BorderLayout.CENTER);
 	        
@@ -107,6 +133,11 @@ public class GameFrame extends JFrame {
 	    	
 	    	this.presentNew(output, this.getGame().executeCommand(argument));
 	    	
+	    	input.setText("");
+	    }
+	    
+	    public void handleInputForButton(JTextField input, JTextArea output, String argument) {
+	    	this.presentNew(output, this.getGame().executeCommand(argument) + "\n");
 	    	input.setText("");
 	    }
 	    
