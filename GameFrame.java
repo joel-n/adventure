@@ -5,6 +5,7 @@ import game.Game;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -184,7 +185,8 @@ public class GameFrame extends JFrame {
 	        inputPanel.add(buttonPanel, BorderLayout.PAGE_START);
 	        inputPanel.add(input, BorderLayout.PAGE_END);
 	        
-	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+	        // buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+	        buttonPanel.setLayout(new GridLayout(1,3));
 	        buttonPanel.add(inventoryButton);
 	        buttonPanel.add(equipmentButton);
 	        
