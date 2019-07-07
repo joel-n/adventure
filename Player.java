@@ -160,6 +160,10 @@ public class Player {
 		this.maxHealth = amount;
 	}
 	
+	public void changeMaxHealth(int amount) {
+		this.setMaxHealth(this.getMaxHealth() + amount);
+	}
+	
 	public void changeHealth(int amount) {
 		if(this.getHealth() + amount < 0) {
 			System.out.println("Game Over");
@@ -244,33 +248,41 @@ public class Player {
 	
 	public void switchBodyArmor(String itemName) {
 		if(this.hasBodyArmor()) {
+			this.changeMaxHealth(0-((Armor) this.getBodyArmor()).getArmor());
 			this.addUnequippedItemToInventory(this.getBodyArmor());				// if not default armor, add it to inventory
 		}
 			this.setBodyArmor((BodyArmor) this.getItem(itemName));				// equip new item
+			this.changeMaxHealth(((Armor) this.getItem(itemName)).getArmor());
 			this.removeEquippedItemFromInventory(itemName);						// remove equipped item from inventory
 		}
 	
 	public void switchHeadgear(String itemName) {
 		if(this.hasHeadgear()) {
+			this.changeMaxHealth(0-((Armor) this.getHeadgear()).getArmor());
 			this.addUnequippedItemToInventory(this.getHeadgear());
 		}
 			this.setHeadgear((Headgear) this.getItem(itemName));
+			this.changeMaxHealth(((Armor) this.getItem(itemName)).getArmor());
 			this.removeEquippedItemFromInventory(itemName);
 		}
 	
 	public void switchGloves(String itemName) {
 		if(this.hasGloves()) {
+			this.changeMaxHealth(0-((Armor) this.getGloves()).getArmor());
 			this.addUnequippedItemToInventory(this.getGloves());
 		}
 		this.setGloves((Gloves) this.getItem(itemName));
+		this.changeMaxHealth(((Armor) this.getItem(itemName)).getArmor());
 		this.removeEquippedItemFromInventory(itemName);
 	}
 	
 	public void switchBoots(String itemName) {
 		if(this.hasBoots()) {
+			this.changeMaxHealth(0-((Armor) this.getBoots()).getArmor());
 			this.addUnequippedItemToInventory(this.getBoots());
 		}
 		this.setBoots((Boots) this.getItem(itemName));
+		this.changeMaxHealth(((Armor) this.getItem(itemName)).getArmor());
 		this.removeEquippedItemFromInventory(itemName);
 	}
 	
