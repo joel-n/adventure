@@ -15,6 +15,7 @@ import javax.swing.*;
 public class GameFrame extends JFrame {
 	
 	private Game game;
+	private JButton changeableButton;
 	
 	public Game getGame() {
 		return this.game;
@@ -23,6 +24,66 @@ public class GameFrame extends JFrame {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+	
+	public JButton getChangeableButton() {
+		return this.changeableButton;
+	}
+	
+	public void setChangeableButton(JButton button) {
+		this.changeableButton = button;
+	}
+	
+	///////////////////////////////////////////////// HELP METHODS
+	// USED TO CHANGE UI WHEN SWITCHING BETWEEN LOOTING AND BATTLE
+    private boolean inBattle() {
+    	return this.getGame().inBattle();
+    }
+
+    private boolean isLooting() {
+    	return this.getGame().isLooting();
+    }
+    
+    public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel) {
+    	if(this.isLooting()) {
+    		JButton changeableButton = new JButton("Exit");
+    		changeableButton.setPreferredSize(new Dimension(100, 80));
+    		changeableButton.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"exit");
+    				removeChangeableButton(buttonPanel);
+	        		changeButton(input,output,buttonPanel);
+	        		addChangeableButton(buttonPanel);
+    			}
+        });
+        this.setChangeableButton(changeableButton);
+        }
+    	else if(this.inBattle()) {
+        	JButton changeableButton = new JButton("Escape");
+            changeableButton.setPreferredSize(new Dimension(100, 80));
+            changeableButton.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		handleInputForButton(input,output,"escape");
+            		removeChangeableButton(buttonPanel);
+            		changeButton(input,output,buttonPanel);
+	        		addChangeableButton(buttonPanel);
+            	}
+            });
+            this.setChangeableButton(changeableButton);
+            }
+    	else {
+        	JButton changeableButton = new JButton("Look");
+            changeableButton.setPreferredSize(new Dimension(100, 80));
+            changeableButton.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent event) {
+            		handleInputForButton(input,output,"look");
+            		removeChangeableButton(buttonPanel);
+            		changeButton(input,output,buttonPanel);
+	        		addChangeableButton(buttonPanel);
+            	}
+            });
+            this.setChangeableButton(changeableButton);
+    	}
+    }
 
 	// FRAME
 		public void createAndShowGUI() {
@@ -62,7 +123,7 @@ public class GameFrame extends JFrame {
 
 	        JTextField input = new JTextField("", 30);
 	        
-	        
+	        JPanel buttonPanel = new JPanel();
 	        
 	        input.addKeyListener(new KeyAdapter() {
 	        	public void keyPressed(KeyEvent event) {
@@ -70,12 +131,15 @@ public class GameFrame extends JFrame {
 	        		handleInput(input,output);
 	        		updateXpAndLevel(xp,levelbar,xpbar);
 	        		updateHealthBar(healthbar, healthtext);
+	        		removeChangeableButton(buttonPanel);
+	        		changeButton(input,output,buttonPanel);
+	        		addChangeableButton(buttonPanel);
 	        		}
 	            }
 	        });
 	        
 	        
-	        JPanel buttonPanel = new JPanel();
+	        
 	        
 	        JButton inventoryButton = new JButton("Inventory");
 	        inventoryButton.setPreferredSize(new Dimension(100, 50));
@@ -93,7 +157,16 @@ public class GameFrame extends JFrame {
 	        	}
 	        });
 	        
+	        JButton changeableButton = new JButton("Look");
+	        changeableButton.setPreferredSize(new Dimension(100, 80));
+	        changeableButton.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent event) {
+	        		handleInputForButton(input,output,"look");
+	        	}
+	        });
 	        
+	        
+	        JPanel inputPanel = new JPanel();
 	        
 
 	        //Display the window.
@@ -105,13 +178,18 @@ public class GameFrame extends JFrame {
 	        levelpanel.setLayout(new BorderLayout());
 	        container.add(levelpanel, BorderLayout.PAGE_START);
 	        container.add(output, BorderLayout.CENTER);
-	        container.add(input, BorderLayout.PAGE_END);
+	        container.add(inputPanel, BorderLayout.PAGE_END);
 	        
-	        container.add(buttonPanel, BorderLayout.LINE_START);
+	        inputPanel.setLayout(new BorderLayout());
+	        inputPanel.add(buttonPanel, BorderLayout.PAGE_START);
+	        inputPanel.add(input, BorderLayout.PAGE_END);
 	        
-	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+	        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 	        buttonPanel.add(inventoryButton);
 	        buttonPanel.add(equipmentButton);
+	        
+	        this.setChangeableButton(changeableButton);
+	        buttonPanel.add(this.getChangeableButton());
 	        
 	        levelpanel.add(xpbar, BorderLayout.CENTER);
 	        
@@ -159,23 +237,12 @@ public class GameFrame extends JFrame {
 	    	healthbar.repaint();
 	    }
 	    
-	    
-	    /*
-	    public static void main(String[] arguments) {
-	    	GameFrame frame = new GameFrame();
-	    	frame.createAndShowGUI();
+	    public void removeChangeableButton(JPanel buttonPanel) {
+	    	buttonPanel.remove(this.getChangeableButton());
 	    }
-	    */
 	    
-	    
-	    /*
-		public static void main(String[] arguments) {
-			javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	            	createAndShowGUI();
-	            }
-	        });
-		}
-		*/
-	
+	    public void addChangeableButton(JPanel buttonPanel) {
+	    	buttonPanel.add(this.getChangeableButton());
+	    }
+
 }
