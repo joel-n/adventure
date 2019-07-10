@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 public class GameFrame extends JFrame {
 	
@@ -65,7 +66,7 @@ public class GameFrame extends JFrame {
             	public void actionPerformed(ActionEvent event) {
             		handleInputForButton(input,output,"escape");
             		removeChangeableButton(buttonPanel);
-            		changeButton(input,output,buttonPanel);
+	        		changeButton(input,output,buttonPanel);
 	        		addChangeableButton(buttonPanel);
             	}
             });
@@ -78,7 +79,7 @@ public class GameFrame extends JFrame {
             	public void actionPerformed(ActionEvent event) {
             		handleInputForButton(input,output,"look");
             		removeChangeableButton(buttonPanel);
-            		changeButton(input,output,buttonPanel);
+	        		changeButton(input,output,buttonPanel);
 	        		addChangeableButton(buttonPanel);
             	}
             });
@@ -101,8 +102,15 @@ public class GameFrame extends JFrame {
 	        JPanel levelpanel = new JPanel();
 	        
 	        JTextArea output = new JTextArea("",20,20);
-	        output.setEditable(false);	       
-	        	                
+	        output.setEditable(false);
+	        
+	        // Makes sure window does not scroll down, but rather stays at the top
+	        DefaultCaret caret = (DefaultCaret) output.getCaret();
+	        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+	        
+	        JScrollPane scrollableOutput = new JScrollPane(output);
+	        scrollableOutput.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	        
 	        JTextArea xp = new JTextArea("",1,1);
 	        xp.setEditable(false);
 	        xp.setOpaque(false);
@@ -178,7 +186,8 @@ public class GameFrame extends JFrame {
 	        container.setLayout(new BorderLayout());
 	        levelpanel.setLayout(new BorderLayout());
 	        container.add(levelpanel, BorderLayout.PAGE_START);
-	        container.add(output, BorderLayout.CENTER);
+	        container.add(scrollableOutput, BorderLayout.CENTER); // added if output should be scrollable
+	        //container.add(output, BorderLayout.CENTER); // added if should not be scrollable
 	        container.add(inputPanel, BorderLayout.PAGE_END);
 	        
 	        inputPanel.setLayout(new BorderLayout());
