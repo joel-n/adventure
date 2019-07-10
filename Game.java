@@ -8,6 +8,8 @@ public class Game {
 	private HashMap<String, Location> world;
 	private Player player;
 	
+	private Quest quest;
+	
 	// battle parameters
 	private boolean inBattle;
 	private Enemy currentEnemy;
@@ -192,6 +194,7 @@ public class Game {
 			case "equip": return this.equipItem(text[1]);
 			case "unequip": return this.unequipItem(text[1]);
 			case "look": return this.look();
+			case "quest": return this.quest();
 			case "inventory": return this.inventory();
 			case "equipment": return this.equipment();
 			case "help": return this.help();
@@ -265,6 +268,21 @@ public class Game {
 			}
 		}
 		
+		public String quest() {
+			if(this.getCurrentQuest() == null) {
+				return "You have completed no quests, look for something to do!";
+			}
+			else if(this.getCurrentQuest().isCompleted()) {
+				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
+						+ "You can now serach for a new quest. \n";
+			}
+			else {
+				return "Current Quest: \n"
+						+ this.getCurrentQuest().getName() + "\n"
+						+ this.getCurrentQuest().getDescription() + "\n";
+
+			}
+		}
 		
 		// consumes the item (Potion)
 		public String drink(String itemName) {
@@ -358,11 +376,9 @@ public class Game {
 			}
 		}
 		
-		
-		
-		
-		
+								
 		// EQUIP DOES NOT AFFECT CARRIED WEIGHT
+		// switchArmor METHODS AFFECTS MAX HEALTH
 		public String equipItem(String itemName) {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
@@ -397,21 +413,25 @@ public class Game {
 				return "You do not have any armor to unequip."; // handles unarmored situation
 			}
 			else if(itemName.equals(this.getPlayer().getBodyArmor().getName())) {
+				this.getPlayer().changeMaxHealth(0-this.getPlayer().getBodyArmor().getArmor());
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBodyArmor());
 				this.getPlayer().setBodyArmor(this.getDefaultBodyArmor());		// set armor to default on unequip
 				return "You unequip " + itemName + ".";
 			}
 			else if (itemName.equals(this.getPlayer().getHeadgear().getName())) {
+				this.getPlayer().changeMaxHealth(0-this.getPlayer().getHeadgear().getArmor());
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getHeadgear());
 				this.getPlayer().setHeadgear(this.getDefaultHeadgear());		// set headgear to default on unequip 
 				return "You unequip " + itemName + ".";
 			}
 			else if (itemName.equals(this.getPlayer().getGloves().getName())) {
+				this.getPlayer().changeMaxHealth(0-this.getPlayer().getGloves().getArmor());
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getGloves());
 				this.getPlayer().setGloves(this.getDefaultGloves());			// set gloves to default on unequip 
 				return "You unequip " + itemName + ".";
 			}
 			else if (itemName.equals(this.getPlayer().getBoots().getName())) {
+				this.getPlayer().changeMaxHealth(0-this.getPlayer().getBoots().getArmor());
 				this.getPlayer().addUnequippedItemToInventory(this.getPlayer().getBoots());
 				this.getPlayer().setBoots(this.getDefaultBoots());				// set boots to default on unequip 
 				return "You unequip " + itemName + ".";
@@ -526,6 +546,19 @@ public class Game {
 		public void triggerEnemyAttack() {
 			this.getPlayer().changeHealth(0-this.getCurrentEnemy().getAttack());
 		}
+		
+		
+		/////////////////////////////////////////////////////////////////////		
+		// QUESTS
+		
+		public Quest getCurrentQuest() {
+			return this.quest;
+		}
+		
+		public void setCurrentQuest(Quest quest) {
+			this.quest = quest;
+		}
+		
 		
 		
 		/////////////////////////////////////////////////////////////////////		

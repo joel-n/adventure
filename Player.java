@@ -81,6 +81,9 @@ public class Player {
 		cmdstore.addCommand(attack);
 		Command escape = new Command("escape", "Escape from battle.");
 		cmdstore.addCommand(escape);
+		
+		Command quest = new Command("quest","View questlog");
+		cmdstore.addCommand(quest);
 	}
 	
 	
