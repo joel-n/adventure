@@ -151,6 +151,16 @@ public class Game {
 		// ADDING PLAYER TO THE WORLD
 		this.getPlayer().setLocation(valley);
 		
+		// QUEST
+		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,false);
+		this.setCurrentQuest(noquest);
+		
+		
+		Quest firstquest = new Quest("A new journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,false);
+		
+		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
+		mountain.addItem(scroll);
+		
 		System.out.println("All set up.");
 	}
 	
@@ -193,6 +203,7 @@ public class Game {
 			case "drop": return this.dropItem(text[1]);
 			case "equip": return this.equipItem(text[1]);
 			case "unequip": return this.unequipItem(text[1]);
+			case "read": return this.read(text[1]);
 			case "look": return this.look();
 			case "quest": return this.quest();
 			case "inventory": return this.inventory();
@@ -265,22 +276,6 @@ public class Game {
 						"You can move in the following directions: " + this.getPlayer().getCurrentLocation().getPaths().keySet().toString() + "\n" +
 						"You see the following items: " + this.getPlayer().getCurrentLocation().getPlaceInventory().keySet().toString() + "\n" +
 						"You see the following people: " + this.getPlayer().getCurrentLocation().getLocationNpcs().keySet().toString() + ". \n";
-			}
-		}
-		
-		public String quest() {
-			if(this.getCurrentQuest() == null) {
-				return "You have completed no quests, look for something to do!";
-			}
-			else if(this.getCurrentQuest().isCompleted()) {
-				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
-						+ "You can now serach for a new quest. \n";
-			}
-			else {
-				return "Current Quest: \n"
-						+ this.getCurrentQuest().getName() + "\n"
-						+ this.getCurrentQuest().getDescription() + "\n";
-
 			}
 		}
 		
@@ -559,6 +554,39 @@ public class Game {
 			this.quest = quest;
 		}
 		
+		public String read(String scroll) {
+			if(this.getPlayer().getItem(scroll) == null) {
+				return "You do not have this item. \n";
+			}
+			else if(!(this.getPlayer().getItem(scroll).getClassName().equals("game.Scroll"))) {
+				return "You cannot read " + scroll + ". \n";
+			}
+			else if(!(this.getCurrentQuest().isCompleted())) {
+				return "You need to complete your current quest before accepting another. \n";
+			}
+			else {
+				this.setCurrentQuest(((Scroll) this.getPlayer().getItem(scroll)).getQuest());
+				this.getPlayer().removeItem(scroll);
+				return "You accepted the quest '" + this.getCurrentQuest().getName() + "'.\n"
+						+ "Task: " + this.getCurrentQuest().getDescription() + "\n";
+			}
+		}
+
+		public String quest() {
+			if(this.getCurrentQuest().getName().equals("noquest")) { // INITIAL QUEST CALLED "noquest"
+				return "You have completed no quests, look for something to do!";
+			}
+			else if(this.getCurrentQuest().isCompleted()) {
+				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
+						+ "You can now serach for a new quest. \n";
+			}
+			else {
+				return "Current Quest: \n"
+						+ this.getCurrentQuest().getName() + "\n"
+						+ this.getCurrentQuest().getDescription() + "\n";
+
+			}
+		}
 		
 		
 		/////////////////////////////////////////////////////////////////////		
