@@ -51,12 +51,9 @@ public class GameFrame extends JFrame {
     		changeableButton.setPreferredSize(new Dimension(100, 80));
     		changeableButton.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"exit");
-    				removeChangeableButton(buttonPanel);
-	        		changeButton(input,output,buttonPanel);
-	        		addChangeableButton(buttonPanel);
+    				handleInputForButton(input,output,"exit",buttonPanel);
     			}
-        });
+    		});
         this.setChangeableButton(changeableButton);
         }
     	else if(this.inBattle()) {
@@ -64,23 +61,17 @@ public class GameFrame extends JFrame {
             changeableButton.setPreferredSize(new Dimension(100, 80));
             changeableButton.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent event) {
-            		handleInputForButton(input,output,"escape");
-            		removeChangeableButton(buttonPanel);
-	        		changeButton(input,output,buttonPanel);
-	        		addChangeableButton(buttonPanel);
+            		handleInputForButton(input,output,"escape",buttonPanel);
             	}
             });
-            this.setChangeableButton(changeableButton);
-            }
+            this.setChangeableButton(changeableButton);      
+        }
     	else {
         	JButton changeableButton = new JButton("Look");
             changeableButton.setPreferredSize(new Dimension(100, 80));
             changeableButton.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent event) {
-            		handleInputForButton(input,output,"look");
-            		removeChangeableButton(buttonPanel);
-	        		changeButton(input,output,buttonPanel);
-	        		addChangeableButton(buttonPanel);
+            		handleInputForButton(input,output,"look",buttonPanel);
             	}
             });
             this.setChangeableButton(changeableButton);
@@ -140,21 +131,17 @@ public class GameFrame extends JFrame {
 	        		handleInput(input,output);
 	        		updateXpAndLevel(xp,levelbar,xpbar);
 	        		updateHealthBar(healthbar, healthtext);
-	        		removeChangeableButton(buttonPanel);
 	        		changeButton(input,output,buttonPanel);
-	        		addChangeableButton(buttonPanel);
 	        		}
 	            }
 	        });
-	        
-	        
 	        
 	        
 	        JButton inventoryButton = new JButton("Inventory");
 	        inventoryButton.setPreferredSize(new Dimension(100, 50));
 	        inventoryButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent event) {
-	        		handleInputForButton(input,output,"inventory");
+	        		handleInputForButton(input,output,"inventory",buttonPanel);
 	        	}
 	        });
 	        
@@ -162,7 +149,7 @@ public class GameFrame extends JFrame {
 	        equipmentButton.setPreferredSize(new Dimension(100, 80));
 	        equipmentButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent event) {
-	        		handleInputForButton(input,output,"equipment");
+	        		handleInputForButton(input,output,"equipment",buttonPanel);
 	        	}
 	        });
 	        
@@ -170,7 +157,7 @@ public class GameFrame extends JFrame {
 	        changeableButton.setPreferredSize(new Dimension(100, 80));
 	        changeableButton.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent event) {
-	        		handleInputForButton(input,output,"look");
+	        		handleInputForButton(input,output,"look",buttonPanel);
 	        	}
 	        });
 	        
@@ -225,9 +212,12 @@ public class GameFrame extends JFrame {
 	    	input.setText("");
 	    }
 	    
-	    public void handleInputForButton(JTextField input, JTextArea output, String argument) {
+	    public void handleInputForButton(JTextField input, JTextArea output, String argument, JPanel buttonPanel) {
 	    	this.presentNew(output, this.getGame().executeCommand(argument) + "\n");
 	    	input.setText("");
+	    	
+    		changeButton(input,output,buttonPanel);
+    		buttonPanel.repaint();
 	    }
 	    
 	    public void presentNew(JTextArea output, String string) {
@@ -248,6 +238,10 @@ public class GameFrame extends JFrame {
 	    	healthbar.repaint();
 	    }
 	    
+	    
+	    /////////////////////////////////////////////////////////////
+	    // MIGHT BE UNNECESSARY/INCORRECT TO ADD REMOVE BUTTONS
+	    // CALLING CHANGE BUTTON AND REPAINTING BETTER
 	    public void removeChangeableButton(JPanel buttonPanel) {
 	    	buttonPanel.remove(this.getChangeableButton());
 	    }
@@ -255,5 +249,6 @@ public class GameFrame extends JFrame {
 	    public void addChangeableButton(JPanel buttonPanel) {
 	    	buttonPanel.add(this.getChangeableButton());
 	    }
+	    /////////////////////////////////////////////////////////////
 
 }
