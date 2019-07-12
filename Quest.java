@@ -16,10 +16,17 @@ public class Quest {
 		this.setCompletionMessage(completionMessage);
 		this.setQuestActive(active);
 		this.setQuestCompleted(completed);
-		this.setGivesReward(givesReward);
-		if(this.givesReward()) {
-			this.setReward(reward);
-		}
+		this.setGivesReward(true);
+		this.setReward(reward);
+	}
+	
+	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, boolean givesReward) {
+		this.setName(name);
+		this.setDescription(description);
+		this.setCompletionMessage(completionMessage);
+		this.setQuestActive(active);
+		this.setQuestCompleted(completed);
+		this.setGivesReward(false);
 	}
 	
 	public void setName(String name) {
