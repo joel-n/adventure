@@ -152,11 +152,11 @@ public class Game {
 		this.getPlayer().setLocation(valley);
 		
 		// QUEST
-		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,false);
+		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,false);
 		this.setCurrentQuest(noquest);
 		
 		
-		Quest firstquest = new Quest("A new journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,false);
+		Quest firstquest = new Quest("A new journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,false);
 		
 		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
 		mountain.addItem(scroll);

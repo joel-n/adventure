@@ -7,25 +7,28 @@ public class Quest {
 	private String completionMessage;
 	private boolean active;
 	private boolean completed;
+	private int id;
 	private boolean givesReward;
 	private Item reward;
 	
-	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, boolean givesReward, Item reward) {
+	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, int id, boolean givesReward, Item reward) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
 		this.setQuestActive(active);
 		this.setQuestCompleted(completed);
+		this.setId(id);
 		this.setGivesReward(true);
 		this.setReward(reward);
 	}
 	
-	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, boolean givesReward) {
+	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, int id, boolean givesReward) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
 		this.setQuestActive(active);
 		this.setQuestCompleted(completed);
+		this.setId(id);
 		this.setGivesReward(false);
 	}
 	
@@ -87,6 +90,14 @@ public class Quest {
 	
 	public String getRewardName() {
 		return this.getReward().getName();
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 	
 }
