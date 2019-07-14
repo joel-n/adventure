@@ -156,7 +156,7 @@ public class Game {
 		this.setCurrentQuest(noquest);
 		
 		
-		Quest firstquest = new Quest("A new journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,false);
+		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,false);
 		
 		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
 		mountain.addItem(scroll);
@@ -331,6 +331,9 @@ public class Game {
 			}
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		// CHEST
+		// TAKE CHEST CAPACITY IN CONSIDERATION
 		public String takeChestItem(String itemName) {
 			if(this.getCurrentChest().getItem(itemName) == null) {
 				return "There is no " + itemName + " in " + this.getCurrentChest().getName() + ".";
@@ -371,7 +374,8 @@ public class Game {
 			}
 		}
 		
-								
+		
+		//////////////////////////////////////////////////////////////////////////////////						
 		// EQUIP DOES NOT AFFECT CARRIED WEIGHT
 		// switchArmor METHODS AFFECTS MAX HEALTH
 		public String equipItem(String itemName) {
@@ -578,6 +582,7 @@ public class Game {
 			}
 			else if(this.getCurrentQuest().isCompleted()) {
 				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
+						+ this.getCurrentQuest().getCompletionMessage() + "\n"
 						+ "You can now serach for a new quest. \n";
 			}
 			else {
