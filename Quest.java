@@ -11,6 +11,9 @@ public class Quest {
 	private boolean givesReward;
 	private Item reward;
 	
+	private int progress;
+	private int goal;
+	
 	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, int id, boolean givesReward, Item reward) {
 		this.setName(name);
 		this.setDescription(description);
@@ -100,4 +103,27 @@ public class Quest {
 		return this.id;
 	}
 	
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
+	
+	public int getProgress() {
+		return this.progress;
+	}
+	
+	public void setGoal(int goal) {
+		this.goal = goal;
+	}
+	
+	public int getGoal() {
+		return this.goal;
+	}
+	
+	public void incrementProgress() {
+		this.setProgress(this.getProgress() + 1);
+	}
+	
+	public void decrementProgress() {
+		this.setProgress(this.getProgress() - 1);
+	}
 }
