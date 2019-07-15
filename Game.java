@@ -100,7 +100,8 @@ public class Game {
 		valley.addPaths(valley, "south", woods, "north");
 		woods.addPaths(woods, "east", hills, "west");
 		mountain.addPaths(mountain, "cave", cave, "exit");
-		cave.addPaths(cave, "inwards", innercave, "entrance");
+		
+		// cave.addPaths(cave, "inwards", innercave, "entrance");
 		
 		// CREATE EMPTY ARMOR SET FOR GAME START AND UNEQUIPS
 		BodyArmor noBodyArmor = new BodyArmor("unarmored", 0, 0, true, 0);
@@ -133,7 +134,6 @@ public class Game {
 		
 		Item potion5 = new Potion("potion", 1, 100, true, 10);
 		Item potion6 = new Potion("potion", 1, 100, true, 10);
-		mountain.addItem(potion5);
 		woods.addItem(potion6);
 		
 		Purse purse = new Purse("purse",0,0,true,100);
@@ -152,6 +152,9 @@ public class Game {
 		// ADDING ENEMY TO WORLD
 		Enemy enemy1 = new Enemy("Enemy", true, "Come at me!", 50, chestplate, 200, 10);
 		mountain.addNpc(enemy1);
+		
+		EnemyGuardian guardian = new EnemyGuardian("Guardian", true, "I guard this cave.", 100, potion5, 600, 15, innercave, "An entrance reveals itself behind the fallen Guardian.", "inwards", "entrance");
+		cave.addNpc(guardian);
 		
 		// ADDING SPAWNER TO WORLD
 		this.setNpcSpawner(new BanditSpawner()); 
