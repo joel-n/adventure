@@ -573,7 +573,16 @@ public class Game {
 				}
 				this.getPlayer().gainXp(this.getCurrentEnemy().getXpYield());
 				this.getPlayer().getCurrentLocation().removeNpc(this.getCurrentEnemy().getName());
-				return "You defeated " + this.getCurrentEnemy().getName() + ".";
+				if(this.getCurrentEnemy().getClass().getName().equals("game.EnemyGuardian")) {
+					// adds paths between current location and location in the guardian, path names are specified in the guardian construction
+					this.getPlayer().getCurrentLocation().addPaths(this.getPlayer().getCurrentLocation(), ((EnemyGuardian)this.getCurrentEnemy()).getPathTo(),
+																	((EnemyGuardian)this.getCurrentEnemy()).getGuardedLocation(), ((EnemyGuardian)this.getCurrentEnemy()).getPathFrom());
+					return "You defeated " + this.getCurrentEnemy().getName() + ". \n"
+							+ ((EnemyGuardian)this.getCurrentEnemy()).getRevelationMessage() + "\n";
+				}
+				else {
+					return "You defeated " + this.getCurrentEnemy().getName() + ".";					
+				}
 			}
 			else {
 				this.triggerEnemyAttack();
