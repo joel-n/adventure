@@ -136,6 +136,9 @@ public class Game {
 		mountain.addItem(potion5);
 		woods.addItem(potion6);
 		
+		Purse purse = new Purse("purse",0,0,true,100);
+		valley.addItem(purse);
+		
 		Chest chest = new Chest("chest", 50, 100, false, 50);
 		valley.addItem(chest);
 		chest.addItem(potion2);
@@ -313,6 +316,12 @@ public class Game {
 			} else if (this.getPlayer().getCarryCapacity() < this.getPlayer().getCurrentLocation().getItem(itemName).getWeight()) {
 				return "You cannot carry anymore items.";
 			}
+			else if(this.getPlayer().getCurrentLocation().getItem(itemName).getClassName().equals("game.Purse")) {
+				int gold = new Integer(((Purse)this.getPlayer().getCurrentLocation().getItem(itemName)).getGold());
+				this.getPlayer().changeGold(((Purse)this.getPlayer().getCurrentLocation().getItem(itemName)).getGold());
+				this.getPlayer().getCurrentLocation().removeItem(itemName);
+				return "You gain " + gold + " gold.";
+			}
 			else if (this.getPlayer().getInventory().getContent().get(itemName) == null) { // if stack is empty, no problem
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
@@ -355,6 +364,12 @@ public class Game {
 				return "You cannot take this item.";
 			} else if (this.getPlayer().getCarryCapacity() < this.getCurrentChest().getItem(itemName).getWeight()) {
 				return "This item is to heavy, drop some items you don't want to carry.";
+			}
+			else if(this.getCurrentChest().getItem(itemName).getClassName().equals("game.Purse")) {
+				int gold = ((Purse)this.getCurrentChest().getItem(itemName)).getGold();
+				this.getPlayer().changeGold(((Purse)this.getCurrentChest().getItem(itemName)).getGold());
+				this.getCurrentChest().removeItem(itemName);
+				return "You gain " + gold + " gold.";
 			}
 			else {
 				this.getPlayer().addItem(this.getCurrentChest().getItem(itemName));

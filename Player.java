@@ -142,13 +142,7 @@ public class Player {
 	}
 	
 	public void changeGold(int amount) {
-		if(this.getGold() + amount < 0) {
-			System.out.println("Not enough money.");
-		}
-		else {
-			this.gold = this.getGold() + amount;
-		}
-		
+		this.setGold(this.getGold() + amount);
 	}
 	
 	public int getHealth() {
@@ -374,24 +368,6 @@ public class Player {
 	public void removeEquippedItemFromInventory(String itemName) {
 		this.getInventory().removeItem(itemName);	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
