@@ -45,38 +45,46 @@ public class GameFrame extends JFrame {
     	return this.getGame().isLooting();
     }
     
+    
     public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel) {
     	if(this.isLooting()) {
-    		JButton changeableButton = new JButton("Exit");
-    		changeableButton.setPreferredSize(new Dimension(100, 80));
-    		changeableButton.addActionListener(new ActionListener() {
+    		this.getChangeableButton().setText("Exit");
+    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+        		this.getChangeableButton().removeActionListener(al);
+    		}
+    		this.getChangeableButton().addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent event) {
     				handleInputForButton(input,output,"exit",buttonPanel);
     			}
     		});
-        this.setChangeableButton(changeableButton);
+    		buttonPanel.repaint();
         }
     	else if(this.inBattle()) {
-        	JButton changeableButton = new JButton("Escape");
-            changeableButton.setPreferredSize(new Dimension(100, 80));
-            changeableButton.addActionListener(new ActionListener() {
-            	public void actionPerformed(ActionEvent event) {
-            		handleInputForButton(input,output,"escape",buttonPanel);
-            	}
-            });
-            this.setChangeableButton(changeableButton);      
+    		this.getChangeableButton().setText("Escape");
+    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+        		this.getChangeableButton().removeActionListener(al);
+    		}
+    		this.getChangeableButton().addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"escape",buttonPanel);
+    			}
+    		});
+    		buttonPanel.repaint();
         }
     	else {
-        	JButton changeableButton = new JButton("Look");
-            changeableButton.setPreferredSize(new Dimension(100, 80));
-            changeableButton.addActionListener(new ActionListener() {
-            	public void actionPerformed(ActionEvent event) {
-            		handleInputForButton(input,output,"look",buttonPanel);
-            	}
-            });
-            this.setChangeableButton(changeableButton);
+    		this.getChangeableButton().setText("Look");
+    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+        		this.getChangeableButton().removeActionListener(al);
+    		}
+    		this.getChangeableButton().addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"look",buttonPanel);
+    			}
+    		});
+    		buttonPanel.repaint();
     	}
     }
+
 
 	// FRAME
 		public void createAndShowGUI() {
@@ -217,7 +225,8 @@ public class GameFrame extends JFrame {
 	    	input.setText("");
 	    	
     		changeButton(input,output,buttonPanel);
-    		buttonPanel.repaint();
+    		// buttonPanel.revalidate();
+    		// buttonPanel.repaint();
 	    }
 	    
 	    public void presentNew(JTextArea output, String string) {
