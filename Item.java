@@ -9,9 +9,9 @@ public class Item {
 	
 	public Item(String name,int weight, int price, boolean removable) {
 		this.setName(name);
-		this.weight = weight;
-		this.price = price;
-		this.removable = removable;
+		this.setWeight(weight);
+		this.setPrice(price);
+		this.setRemovable(removable);
 	}
 	
 	public String getName() {
@@ -26,12 +26,24 @@ public class Item {
 		return this.weight;
 	}
 	
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+	
 	public int getPrice() {
 		return this.price;
 	}
 	
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
 	public boolean isRemovable() {
 		return this.removable;
+	}
+	
+	public void setRemovable(boolean removable) {
+		this.removable = removable;
 	}
 	
 	public String getClassName() {
