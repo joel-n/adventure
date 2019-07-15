@@ -333,7 +333,7 @@ public class Game {
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		// CHEST
-		// TAKE CHEST CAPACITY IN CONSIDERATION
+		// TAKE CHEST CAPACITY (50) IN CONSIDERATION:
 		public String takeChestItem(String itemName) {
 			if(this.getCurrentChest().getItem(itemName) == null) {
 				return "There is no " + itemName + " in " + this.getCurrentChest().getName() + ".";
@@ -352,9 +352,14 @@ public class Game {
 			}
 		}
 		
+
+		// NEED TO CHECK IF ITEMSTACK IS FULL
 		public String placeItemInChest(String itemName) {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
+			}
+			else if(this.getCurrentChest().getContent().get(itemName).getNumber() >= 50) {
+				return this.getCurrentChest().getName() + " cannot contain any more items of this type. \n";
 			}
 			else {
 				this.getCurrentChest().addItem(this.getPlayer().getItem(itemName));

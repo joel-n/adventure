@@ -70,10 +70,17 @@ public class Chest extends Item {
 	}
 	
 	// TO DO
-	// public String printContent() {
-		// String s = new String("");
-		// for()
-		// return this.getContent().keySet().toString();
-	// }
+	public String printContent() {
+		if(this.getContent().isEmpty()) {
+			return this.getName() + " is empty.";
+		}
+		else {
+			String s = new String(this.getName() + " contains: \n");
+			for(HashMap.Entry<String,ItemStack> entry : this.getContent().entrySet()) {
+				s = s.concat(entry.getKey() + ": " + entry.getValue().getNumber() + "\n");
+			}
+			return s;
+		}
+	}
 	
 }

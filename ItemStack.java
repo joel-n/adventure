@@ -21,14 +21,6 @@ public class ItemStack {
 		this.number = number;
 	}
 	
-	public void incrementNumber() {
-		this.setNumber(this.getNumber() + 1);
-	}
-	
-	public void decrementNumber() {
-		this.setNumber(this.getNumber() - 1);
-	}
-	
 	public ArrayList<Item> getItemList(){
 		return this.items;
 	}
@@ -37,16 +29,28 @@ public class ItemStack {
 		this.items = list;
 	}
 	
+	// ADDING AUTOMATICALLY INCREMENTS NUMBER IN STACK
 	public void addItem(Item item) {
 		this.getItemList().add(item);
+		this.incrementNumber();
 	}
 	
 	public Item getItem() {
 		return this.getItemList().get(0);
 	}
 	
+	// REMOVING AUTOMATICALLY DECREMENTS NUMBER IN STACK
 	public void removeItem() {
 		this.getItemList().remove(0);
+		this.decrementNumber();
+	}
+	
+	public void incrementNumber() {
+		this.setNumber(this.getNumber() + 1);
+	}
+	
+	public void decrementNumber() {
+		this.setNumber(this.getNumber() - 1);
 	}
 	
 }
