@@ -6,12 +6,14 @@ public class Chest extends Item {
 
 	private HashMap<String, ItemStack> content;
 	private int itemWeight;
+	private int itemSlots;
 	
-	public Chest(String name, int weight, int price, boolean removable) {
+	public Chest(String name, int weight, int price, boolean removable, int itemSlots) {
 		super(name, weight, price, removable);
 		HashMap<String, ItemStack> content = new HashMap<String, ItemStack>();
 		this.setContent(content);
-		this.setItemWeight(0);
+		this.setItemWeight(0); // WEIGHT OF ITEMS INSIDE
+		this.setItemSlots(itemSlots);
 	}
 	
 	public void setContent(HashMap<String, ItemStack> content) {
@@ -77,10 +79,18 @@ public class Chest extends Item {
 		else {
 			String s = new String(this.getName() + " contains: \n");
 			for(HashMap.Entry<String,ItemStack> entry : this.getContent().entrySet()) {
-				s = s.concat(entry.getKey() + ": " + entry.getValue().getNumber() + "\n");
+				s = s.concat(entry.getValue().getNumber() + " " + entry.getKey() + "\n");
 			}
 			return s;
 		}
+	}
+	
+	public void setItemSlots(int slots) {
+		this.itemSlots = slots;
+	}
+	
+	public int getItemSlots() {
+		return this.itemSlots;
 	}
 	
 }

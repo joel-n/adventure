@@ -9,7 +9,7 @@ public class Player {
 	private int health;
 	private int maxHealth;
 	private int carryCapacity;
-	private HashMap<String,Item> items;
+	private Chest inventory;
 	private int xp;
 	private int nextLevelLimit;
 	private int levelMultiplier;
@@ -29,8 +29,8 @@ public class Player {
 		this.setHealth(health);
 		this.setMaxHealth(maxHealth);
 		this.setCarryCapacity(carryCapacity);
-		HashMap<String,Item> items = new HashMap<String,Item>();
-		this.setInventoryHash(items);
+		Chest inventory = new Chest("Inventory",0,0,false,100);
+		this.setInventory(inventory);
 		this.setXp(xp);
 		this.setNextLevelLimit(nextLevelLimit);
 		this.setLevelMultiplier(levelMultiplier);
@@ -91,27 +91,28 @@ public class Player {
 	
 	
 	/////////////////////////////////////////////////////////////////////////// ITEMS
-	public void setInventoryHash(HashMap<String, Item> itemHash) {
-		this.items = itemHash;
+	public void setInventory(Chest inventory) {
+		this.inventory = inventory;
 	}
 	
+	// CARRY CAPACITY AND SPACE SHOULD BE CHECKED IN GAME
 	public void addItem(Item item) {
-		this.getInventory().put(item.getName(), item);
+		this.getInventory().addItem(item);
 		this.setCarryCapacity(this.getCarryCapacity()-item.getWeight());
 	}
 	
 	// returns item if found, else returns null
 	public Item getItem(String enteredItem) {
-		return this.getInventory().get(enteredItem);
+		return this.getInventory().getItem(enteredItem);
 	}
 	
 	public void removeItem(String itemName) {
 		this.setCarryCapacity(this.getCarryCapacity()+this.getItem(itemName).getWeight());
-		this.getInventory().remove(itemName);	
+		this.getInventory().removeItem(itemName);	
 	}
 	
-	public HashMap<String, Item> getInventory(){
-		return this.items;
+	public Chest getInventory(){
+		return this.inventory;
 	}
 	
 
@@ -363,13 +364,15 @@ public class Player {
 	}
 	
 	// DOES NOT AFFECT CARRYCAPACITY
+	// CARRY SLOTS NOT MANAGED, EVERY WEAPON AND ARMOR IS UNIQUE
 	public void addUnequippedItemToInventory(Item item) {
-		this.getInventory().put(item.getName(), item);
+		this.getInventory().addItem(item);
 	}
 
 	// DOES NOT AFFECT CARRYCAPACITY	
+	// CARRY SLOTS NOT MANAGED, EVERY WEAPON AND ARMOR IS UNIQUE
 	public void removeEquippedItemFromInventory(String itemName) {
-		this.getInventory().remove(itemName);	
+		this.getInventory().removeItem(itemName);	
 	}
 	
 	

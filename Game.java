@@ -131,7 +131,12 @@ public class Game {
 		Potion potion3 = new Potion("stuckpotion", 2, 200, false, 25);
 		Potion potion4 = new Potion("heavypotion", 2000, 200, true, 25);
 		
-		Chest chest = new Chest("chest", 50, 100, false);
+		Item potion5 = new Potion("potion", 1, 100, true, 10);
+		Item potion6 = new Potion("potion", 1, 100, true, 10);
+		mountain.addItem(potion5);
+		woods.addItem(potion6);
+		
+		Chest chest = new Chest("chest", 50, 100, false, 50);
 		valley.addItem(chest);
 		chest.addItem(potion2);
 		chest.addItem(potion3);
@@ -251,7 +256,8 @@ public class Game {
 		// returns description of current location, its available paths and items
 		public String look() {
 			if(this.isLooting() == true) {
-				return this.getCurrentChest().getName() + " contains: "	+ this.getCurrentChest().getContent().keySet().toString() + ".";
+				return this.getCurrentChest().printContent();
+				// return this.getCurrentChest().getName() + " contains: "	+ this.getCurrentChest().getContent().keySet().toString() + ".";
 			}
 			else if(this.getPlayer().getCurrentLocation().getPlaceInventory().isEmpty() && this.getPlayer().getCurrentLocation().getLocationNpcs().isEmpty()) {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
@@ -307,6 +313,15 @@ public class Game {
 			} else if (this.getPlayer().getCarryCapacity() < this.getPlayer().getCurrentLocation().getItem(itemName).getWeight()) {
 				return "You cannot carry anymore items.";
 			}
+			else if (this.getPlayer().getInventory().getContent().get(itemName) == null) { // if stack is empty, no problem
+				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
+				this.getPlayer().getCurrentLocation().removeItem(itemName);
+				return "You take " + itemName + ". \n"
+						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
+			}
+			else if(this.getPlayer().getInventory().getContent().get(itemName).getNumber() >= this.getPlayer().getInventory().getItemSlots()) { // more than 50 items in stack?
+				return "You cannot carry any more items of this type.";
+			}
 			else {
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
@@ -326,14 +341,13 @@ public class Game {
 			else {
 				this.setIsLooting(true);
 				this.setCurrentChest((Chest) this.getPlayer().getCurrentLocation().getItem(chestName));
-				return chestName + " contains: "
-						+ ((Chest) this.getPlayer().getCurrentLocation().getItem(chestName)).getContent().keySet().toString() + ".";
+				return this.getCurrentChest().printContent();
 			}
 		}
 		
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		// CHEST
-		// TAKE CHEST CAPACITY (50) IN CONSIDERATION:
+		// TAKES CHEST CAPACITY IN CONSIDERATION:
 		public String takeChestItem(String itemName) {
 			if(this.getCurrentChest().getItem(itemName) == null) {
 				return "There is no " + itemName + " in " + this.getCurrentChest().getName() + ".";
@@ -358,7 +372,13 @@ public class Game {
 			if(this.getPlayer().getItem(itemName) == null) {
 				return "You do not have this item in your inventory.";
 			}
-			else if(this.getCurrentChest().getContent().get(itemName).getNumber() >= 50) {
+			else if(this.getCurrentChest().getContent().get(itemName) == null) {
+				this.getCurrentChest().addItem(this.getPlayer().getItem(itemName));
+				this.getPlayer().removeItem(itemName);
+				return "You put " + itemName + " in " + this.getCurrentChest().getName() + ". \n"
+							+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight.";
+			}
+			else if(this.getCurrentChest().getContent().get(itemName).getNumber() >= this.getCurrentChest().getItemSlots()) {
 				return this.getCurrentChest().getName() + " cannot contain any more items of this type. \n";
 			}
 			else {
@@ -469,15 +489,15 @@ public class Game {
 		
 		// returns information on the players items, carry capacity and gold
 		public String inventory() {
-			if(this.getPlayer().getInventory().isEmpty()) {
+			if(this.getPlayer().getInventory().getContent().isEmpty()) {
 				return "You have no items in your inventory." + "\n"
 						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
 						+ "You have " + this.getPlayer().getGold() + " gold.";	
 			}
 			else {
-			return "You have the following items: ".concat(this.getPlayer().getInventory().keySet().toString() + "\n"
+			return this.getPlayer().getInventory().printContent()
 				+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
-						+ "You have " + this.getPlayer().getGold() + " gold.");				
+						+ "You have " + this.getPlayer().getGold() + " gold.";				
 			}
 
 		}
