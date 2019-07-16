@@ -16,6 +16,15 @@ public class EnemyGuardian extends Enemy {
 					this.setRevelationMessage(revelationMessage);
 	}
 	
+	public EnemyGuardian(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack, int questId, Location guardedLocation,
+			String revelationMessage, String pathTo, String pathFrom) {
+					super(name,attackable,talkLine,health,lootItem,xpYield,attack,questId);
+					this.setGuardedLocation(guardedLocation);
+					this.setPathTo(pathTo);
+					this.setPathFrom(pathFrom);
+					this.setRevelationMessage(revelationMessage);
+	}
+	
 	public void setGuardedLocation(Location location) {
 		this.guardedLocation = location;
 	}

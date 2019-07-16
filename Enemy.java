@@ -8,6 +8,8 @@ public class Enemy extends Npc {
 	private int xpYield;
 	private int attack;
 	
+	private int questId;
+	
 	
 	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack) {
 		super(name,attackable,talkLine);
@@ -15,6 +17,15 @@ public class Enemy extends Npc {
 		this.setLoot(lootItem);
 		this.setXpYield(xpYield);
 		this.setAttack(attack);
+	}
+	
+	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack, int questId) {
+		super(name,attackable,talkLine);
+		this.setHealth(health);
+		this.setLoot(lootItem);
+		this.setXpYield(xpYield);
+		this.setAttack(attack);
+		this.setQuestId(questId);
 	}
 	
 	
@@ -52,6 +63,14 @@ public class Enemy extends Npc {
 	
 	public void setAttack(int attack) {
 		this.attack = attack;
+	}
+	
+	public void setQuestId(int id) {
+		this.questId = id;
+	}
+	
+	public int getQuestId() {
+		return this.questId;
 	}
 
 }
