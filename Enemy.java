@@ -17,6 +17,7 @@ public class Enemy extends Npc {
 		this.setLoot(lootItem);
 		this.setXpYield(xpYield);
 		this.setAttack(attack);
+		this.setQuestId(0);
 	}
 	
 	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack, int questId) {
