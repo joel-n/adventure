@@ -7,11 +7,22 @@ public class Item {
 	private int price;
 	private boolean removable;
 	
+	private int questId;
+	
 	public Item(String name,int weight, int price, boolean removable) {
 		this.setName(name);
 		this.setWeight(weight);
 		this.setPrice(price);
 		this.setRemovable(removable);
+		this.setQuestId(0);
+	}
+	
+	public Item(String name,int weight, int price, boolean removable, int questId) {
+		this.setName(name);
+		this.setWeight(weight);
+		this.setPrice(price);
+		this.setRemovable(removable);
+		this.setQuestId(questId);
 	}
 	
 	public String getName() {
@@ -49,5 +60,14 @@ public class Item {
 	public String getClassName() {
 		return this.getClass().getName();
 	}
+	
+	public void setQuestId(int id) {
+		this.questId = id;
+	}
+	
+	public int getQuestId() {
+		return this.questId;
+	}
+
 	
 }
