@@ -8,7 +8,7 @@ public class Location {
 	private String description;
 	private String onWrongPathMessage;
 	private HashMap<String, Location> paths;
-	private HashMap<String, Item> items;
+	private HashMap<String, ItemStack> items;
 	private HashMap<String, Npc> npcs;
 	
 	private boolean outdoors;
@@ -18,13 +18,13 @@ public class Location {
 		this.setDescription(description);
 		this.setOnWrongPathMessage(wrongPathMessage);
 		this.setOutdoors(outdoors);
-		HashMap<String, Item> itemHash = new HashMap<String, Item>();
+		HashMap<String, ItemStack> itemHash = new HashMap<String, ItemStack>();
 		HashMap<String, Location> locationHash = new HashMap<String, Location>();
 		HashMap<String, Npc> npcHash = new HashMap<String, Npc>();
 		setLocationHashes(locationHash, itemHash, npcHash);
 	}
 	
-	public void setLocationHashes(HashMap<String, Location> pathHash, HashMap<String, Item> itemHash, HashMap<String, Npc> npcHash) {
+	public void setLocationHashes(HashMap<String, Location> pathHash, HashMap<String, ItemStack> itemHash, HashMap<String, Npc> npcHash) {
 		this.paths = pathHash;
 		this.items = itemHash;
 		this.npcs = npcHash;
@@ -36,23 +36,54 @@ public class Location {
 	}
 	
 	public void addItem(Item item) {
-		this.getPlaceInventory().put(item.getName(), item);
+		if(this.getPlaceInventory().get(item.getName()) == null) {
+			ItemStack itemStack = new ItemStack(Integer.MAX_VALUE);
+			itemStack.addItem(item);
+			this.getPlaceInventory().put(item.getName(), itemStack);
+		}
+		else {
+			this.getPlaceInventory().get(item.getName()).addItem(item);
+		}
 	}
 	
 	public void removeItem(String itemName) {
 		this.getPlaceInventory().remove(itemName);
+		if(this.getPlaceInventory().get(itemName).getNumber() <= 1) {
+			this.getPlaceInventory().remove(itemName);
+		}
+		else {
+			this.getPlaceInventory().get(itemName).removeItem();
+		}
 	}
 
 	
 	// returns item if found, else returns null
-	public Item getItem(String enteredItem) {
-		return this.getPlaceInventory().get(enteredItem);
+	public Item getItem(String itemName) {
+		if(this.getPlaceInventory().get(itemName) == null) {
+			return null;
+		}
+		else {
+			return this.getPlaceInventory().get(itemName).getItem();
+		}
 	}
 	
-	public HashMap<String, Item> getPlaceInventory(){
+	public HashMap<String, ItemStack> getPlaceInventory(){
 		return this.items;
 	}
 	
+	
+	public String printItems() {
+		if(this.getPlaceInventory().isEmpty()) {
+			return "There are no items here.";
+		}
+		else {
+			String s = new String("You see the following items: \n");
+			for(HashMap.Entry<String,ItemStack> entry : this.getPlaceInventory().entrySet()) {
+				s = s.concat(entry.getValue().getNumber() + " " + entry.getKey() + "\n");
+			}
+			return s;
+		}
+	}
 	
 	public HashMap<String, Npc> getLocationNpcs(){
 		return this.npcs;
@@ -69,6 +100,15 @@ public class Location {
 	
 	public void removeNpc(String npcName) {
 		this.getLocationNpcs().remove(npcName);
+	}
+	
+	public String printNpcs() {
+		if(this.getLocationNpcs().isEmpty()) {
+			return "There are no people in this place. \n";
+		}
+		else {
+			return "You see the following people: " + this.getLocationNpcs().keySet().toString() + ".";
+		}
 	}
 	
 	public String getName() {
