@@ -1,4 +1,13 @@
 # adventure
-small adventure game
+## small text-based adventure game
 
----test of new branch---
+### features
+GUI
+
+completeable quests
+
+equippable items
+
+several item types
+
+combat system
