@@ -5,7 +5,7 @@ public class Quest {
 	private String name;
 	private String description;
 	private String completionMessage;
-	private boolean active;
+	private boolean sendMessageNext;
 	private boolean completed;
 	private int id;
 	private boolean givesReward;
@@ -14,24 +14,28 @@ public class Quest {
 	private int progress;
 	private int goal;
 	
-	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, int id, boolean givesReward, Item reward) {
+	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int progress, int goal, boolean givesReward, Item reward) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
-		this.setQuestActive(active);
+		this.setSendMessageNext(sendMessageNext);
 		this.setQuestCompleted(completed);
 		this.setId(id);
+		this.setProgress(progress);
+		this.setGoal(goal);
 		this.setGivesReward(true);
 		this.setReward(reward);
 	}
 	
-	public Quest(String name, String description, String completionMessage, boolean active, boolean completed, int id, boolean givesReward) {
+	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int progress, int goal, boolean givesReward) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
-		this.setQuestActive(active);
+		this.setSendMessageNext(sendMessageNext);
 		this.setQuestCompleted(completed);
 		this.setId(id);
+		this.setProgress(progress);
+		this.setGoal(goal);
 		this.setGivesReward(false);
 	}
 	
@@ -59,12 +63,12 @@ public class Quest {
 		return this.completionMessage;
 	}
 	
-	public void setQuestActive(boolean active) {
-		this.active = active;
+	public void setSendMessageNext(boolean sendMessageNext) {
+		this.sendMessageNext = sendMessageNext;
 	}
 	
-	public boolean isActive() {
-		return this.active;
+	public boolean sendMessageNext() {
+		return this.sendMessageNext;
 	}
 	
 	public void setQuestCompleted(boolean completed) {

@@ -128,6 +128,9 @@ public class Game {
 		Weapon sword = new Weapon("sword", 10, 200, true, 10, false);
 		valley.addItem(sword);
 		
+		Weapon swordEvalon = new Weapon("EvalonianSword", 15, 400, true, 1, 15, false);
+		hills.addItem(swordEvalon);
+		
 		Potion potion2 = new Potion("largepotion", 2, 200, true, 25);
 		Potion potion3 = new Potion("stuckpotion", 2, 200, false, 25);
 		Potion potion4 = new Potion("heavypotion", 2000, 200, true, 25);
@@ -163,11 +166,11 @@ public class Game {
 		this.getPlayer().setLocation(valley);
 		
 		// QUEST
-		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,false);
+		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,0,0,false);
 		this.setCurrentQuest(noquest);
 		
 		
-		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,false);
+		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,0,1,false);
 		
 		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
 		mountain.addItem(scroll);
@@ -325,7 +328,8 @@ public class Game {
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
 				return "You gain " + gold + " gold.";
 			}
-			else if (this.getPlayer().getInventory().getContent().get(itemName) == null) { // if stack is empty, no problem
+			else if (this.getPlayer().getInventory().getContent().get(itemName) == null) { // if player inventory Itemstack is empty, no problem
+				this.handleIncQuestrelatedItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
 				return "You take " + itemName + ". \n"
@@ -335,6 +339,7 @@ public class Game {
 				return "You cannot carry any more items of this type.";
 			}
 			else {
+				this.handleIncQuestrelatedItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().addItem(this.getPlayer().getCurrentLocation().getItem(itemName));
 				this.getPlayer().getCurrentLocation().removeItem(itemName);
 				return "You take " + itemName + ". \n"
@@ -375,6 +380,7 @@ public class Game {
 				return "You gain " + gold + " gold.";
 			}
 			else {
+				this.handleIncQuestrelatedItem(this.getCurrentChest().getItem(itemName));
 				this.getPlayer().addItem(this.getCurrentChest().getItem(itemName));
 				this.getCurrentChest().removeItem(itemName);
 				return "You take " + itemName + ". \n"
@@ -391,6 +397,7 @@ public class Game {
 				return "You do not have this item in your inventory.";
 			}
 			else if(this.getCurrentChest().getContent().get(itemName) == null) {
+				this.handleDecQuestrelatedItem(this.getPlayer().getItem(itemName));
 				this.getCurrentChest().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().removeItem(itemName);
 				return "You put " + itemName + " in " + this.getCurrentChest().getName() + ". \n"
@@ -400,6 +407,7 @@ public class Game {
 				return this.getCurrentChest().getName() + " cannot contain any more items of this type. \n";
 			}
 			else {
+				this.handleDecQuestrelatedItem(this.getPlayer().getItem(itemName));
 				this.getCurrentChest().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().removeItem(itemName);
 				return "You put " + itemName + " in " + this.getCurrentChest().getName() + ". \n"
@@ -497,6 +505,7 @@ public class Game {
 				return "You do not have this item in your inventory.";
 			}
 			else {
+				this.handleDecQuestrelatedItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().getCurrentLocation().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().removeItem(itemName);
 				return "You drop " + itemName + ". \n"
@@ -571,9 +580,13 @@ public class Game {
 			this.getCurrentEnemy().setHealth(this.getCurrentEnemy().getHealth()-this.getPlayer().getWeapon().getAttack());
 			if(this.getCurrentEnemy().isDefeated()) {
 				this.setInBattle(false);
+				
+				this.handleQuestrelatedEnemy(this.getCurrentEnemy());
+				
 				if(this.getCurrentEnemy().getLoot() != null) {
 					this.getPlayer().getCurrentLocation().addItem(this.getCurrentEnemy().getLoot());
 				}
+				
 				this.getPlayer().gainXp(this.getCurrentEnemy().getXpYield());
 				this.getPlayer().getCurrentLocation().removeNpc(this.getCurrentEnemy().getName());
 				if(this.getCurrentEnemy().getClass().getName().equals("game.EnemyGuardian")) {
@@ -632,9 +645,12 @@ public class Game {
 			if(this.getCurrentQuest().getName().equals("noquest")) { // INITIAL QUEST CALLED "noquest"
 				return "You have completed no quests, look for something to do!";
 			}
+			else if(this.getCurrentQuest().sendMessageNext()) {
+				this.getCurrentQuest().setSendMessageNext(false);
+				return this.getCurrentQuest().getCompletionMessage();
+			}
 			else if(this.getCurrentQuest().isCompleted()) {
 				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
-						+ this.getCurrentQuest().getCompletionMessage() + "\n"
 						+ "You can now serach for a new quest. \n";
 			}
 			else {
@@ -642,6 +658,32 @@ public class Game {
 						+ this.getCurrentQuest().getName() + "\n"
 						+ this.getCurrentQuest().getDescription() + "\n";
 
+			}
+		}
+		
+		private void handleIncQuestrelatedItem(Item item) {
+			if(item.getQuestId() == this.getCurrentQuest().getId()) {
+				this.getCurrentQuest().incrementProgress();
+			}
+			if(this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+				this.getCurrentQuest().setQuestCompleted(true);
+				this.getCurrentQuest().setSendMessageNext(true);
+			}
+		}
+		
+		private void handleDecQuestrelatedItem(Item item) {
+			if(item.getQuestId() == this.getCurrentQuest().getId()) {
+				this.getCurrentQuest().decrementProgress();
+			}
+		}
+		
+		private void handleQuestrelatedEnemy(Enemy enemy) {
+			if(enemy.getQuestId() == this.getCurrentQuest().getId()) {
+				this.getCurrentQuest().incrementProgress();
+			}
+			if(this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+				this.getCurrentQuest().setQuestCompleted(true);
+				this.getCurrentQuest().setSendMessageNext(true);
 			}
 		}
 		

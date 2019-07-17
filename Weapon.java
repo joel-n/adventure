@@ -12,6 +12,12 @@ public class Weapon extends Item {
 		this.setRanged(ranged);
 	}
 	
+	public Weapon(String name,int weight, int price, boolean removable, int questId, int attack, boolean ranged) {
+		super(name,weight,price,removable,questId);
+		this.setAttack(attack);
+		this.setRanged(ranged);
+	}
+	
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
