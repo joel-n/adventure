@@ -32,7 +32,7 @@ public class Chest extends Item {
 	// ADD AND REMOVE ITEM; WEIGHT IS UPDATED 
 	public void addItem(Item item) {
 		if(this.getContent().get(item.getName()) == null) {
-			ItemStack itemStack = new ItemStack(50);
+			ItemStack itemStack = new ItemStack(this.getItemSlots());
 			itemStack.addItem(item);
 			this.getContent().put(item.getName(), itemStack);
 		}
