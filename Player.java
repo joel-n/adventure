@@ -29,7 +29,7 @@ public class Player {
 		this.setHealth(health);
 		this.setMaxHealth(maxHealth);
 		this.setCarryCapacity(carryCapacity);
-		Chest inventory = new Chest("Inventory",0,0,false,100);
+		Chest inventory = new Chest("inventory",0,0,false,100);
 		this.setInventory(inventory);
 		this.setXp(xp);
 		this.setNextLevelLimit(nextLevelLimit);

@@ -505,7 +505,7 @@ public class Game {
 						+ "You have " + this.getPlayer().getGold() + " gold.";	
 			}
 			else {
-			return this.getPlayer().getInventory().printContent()
+			return "Your " + this.getPlayer().getInventory().printContent()
 				+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
 						+ "You have " + this.getPlayer().getGold() + " gold.";				
 			}
