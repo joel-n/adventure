@@ -11,10 +11,13 @@ public class Location {
 	private HashMap<String, Item> items;
 	private HashMap<String, Npc> npcs;
 	
-	public Location(String name, String description, String wrongPathMessage) {
+	private boolean outdoors;
+	
+	public Location(String name, String description, String wrongPathMessage, boolean outdoors) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setOnWrongPathMessage(wrongPathMessage);
+		this.setOutdoors(outdoors);
 		HashMap<String, Item> itemHash = new HashMap<String, Item>();
 		HashMap<String, Location> locationHash = new HashMap<String, Location>();
 		HashMap<String, Npc> npcHash = new HashMap<String, Npc>();
@@ -101,8 +104,12 @@ public class Location {
 	}
 	
 	
-	public void doCommand(String string) {
-		
+	public void setOutdoors(boolean outdoors) {
+		this.outdoors = outdoors;
+	}
+	
+	public boolean isOutdoors() {
+		return this.outdoors;
 	}
 
 }

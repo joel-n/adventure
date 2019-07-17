@@ -69,28 +69,28 @@ public class Game {
 		
 		// CREATING AND ADDING LOCATIONS, LOCATION AND ITEM HASHES ARE AUTOMATICALLY SET BY CALLING CONSTRUCTOR
 		Location valley = new Location("valley", "Evalon Valley. A green valley with fertile soil.",
-				"You cannot go in that direction.");
+				"You cannot go in that direction.",true);
 		this.addLocation(valley);
 		Location plains = new Location("plains", "West Plains. A desolate plain.",
-				"You cannot go in that direction. There is nothing but dust over there.");
+				"You cannot go in that direction. There is nothing but dust over there.",true);
 		this.addLocation(plains);
 		Location mountain = new Location("mountain", "Northern Mountains. A labyrinth of razor sharp rocks.",
-				"You cannot go in that direction. The Mountain is not so easily climbed.");
+				"You cannot go in that direction. The Mountain is not so easily climbed.",true);
 		this.addLocation(mountain);
 		Location shore = new Location("shore", "Western Shore. The water is calm.",
-				"You cannot go in that direction. There might be dangerous beasts in the water.");
+				"You cannot go in that direction. There might be dangerous beasts in the water.",true);
 		this.addLocation(shore);
 		Location woods = new Location("woods", "King's Forest. A bright forest with high pines.",
-				"You cannot go in that direction. Be careful not to get lost in the woods.");
+				"You cannot go in that direction. Be careful not to get lost in the woods.",true);
 		this.addLocation(woods);
 		Location hills = new Location("hills", "Evalon hills.",
-				"You cannot go in that direction.");
+				"You cannot go in that direction.",true);
 		this.addLocation(hills);
 		Location cave = new Location("cave", "Blood Cave. Few of those who venture here ever return.",
-				"The air smells foul over there, better not go in that direction.");
+				"The air smells foul over there, better not go in that direction.",true);
 		this.addLocation(cave);
 		Location innercave = new Location("innercave", "Blood Cave. This path must lead somewhere.",
-				"Better not go over there.");
+				"Better not go over there.",true);
 		
 		// CONNECTING LOCATIONS
 		// IT DOES NOT MATTER ON WHICH LOCATION THE METHOD ADDPATHS IS CALLED
@@ -166,11 +166,11 @@ public class Game {
 		this.getPlayer().setLocation(valley);
 		
 		// QUEST
-		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,0,0,false);
+		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,0,0,0);
 		this.setCurrentQuest(noquest);
 		
 		
-		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,0,1,false);
+		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,0,1,200);
 		
 		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
 		mountain.addItem(scroll);
@@ -313,7 +313,7 @@ public class Game {
 		// player takes an item from the location
 		// carry capacity managed in player's addItem method
 		
-		// TO DO: TAKE DUPLICATE ITEMS??
+
 		public String takeItem(String itemName) {
 			if(this.getPlayer().getCurrentLocation().getItem(itemName) == null) {
 				return "There is no " + itemName + " in this location.";
@@ -362,7 +362,8 @@ public class Game {
 			}
 		}
 		
-		///////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////	
+		/////////////////////////////////////////////////////////////////////	
 		// CHEST
 		// TAKES CHEST CAPACITY IN CONSIDERATION:
 		public String takeChestItem(String itemName) {
@@ -425,8 +426,8 @@ public class Game {
 			}
 		}
 		
-		
-		//////////////////////////////////////////////////////////////////////////////////						
+		/////////////////////////////////////////////////////////////////////	
+		/////////////////////////////////////////////////////////////////////					
 		// EQUIP DOES NOT AFFECT CARRIED WEIGHT
 		// switchArmor METHODS AFFECTS MAX HEALTH
 		public String equipItem(String itemName) {
@@ -611,10 +612,9 @@ public class Game {
 			this.getPlayer().changeHealth(0-this.getCurrentEnemy().getAttack());
 		}
 		
-		
+		/////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////		
 		// QUESTS
-		
 		public Quest getCurrentQuest() {
 			return this.quest;
 		}
@@ -640,14 +640,21 @@ public class Game {
 						+ "Task: " + this.getCurrentQuest().getDescription() + "\n";
 			}
 		}
-
+		
+		
+		// SENDS COMPLETION MESSAGE AND REWARDS XP IF SENDMESSAGENEXT IS TRUE
+		// CANNOT BE TRIGGERED AGAIN SINCE SENDMESSAGENEXT IS SET TO FALSE AFTER
+		// SENDMESSAGENEXT CANNOT BE SET TO TRUE AGAIN AFTER QUEST IS COMPLETED
+		// QUEST COMPLETION CAN NEVER BE UNDONE
 		public String quest() {
 			if(this.getCurrentQuest().getName().equals("noquest")) { // INITIAL QUEST CALLED "noquest"
 				return "You have completed no quests, look for something to do!";
 			}
 			else if(this.getCurrentQuest().sendMessageNext()) {
 				this.getCurrentQuest().setSendMessageNext(false);
-				return this.getCurrentQuest().getCompletionMessage();
+				this.getPlayer().gainXp(this.getCurrentQuest().getXpYield());
+				return this.getCurrentQuest().getCompletionMessage() + "\n" +
+						"You gain " + this.getCurrentQuest().getXpYield() + " xp. \n";
 			}
 			else if(this.getCurrentQuest().isCompleted()) {
 				return "You have completed your last quest, " + this.getCurrentQuest().getName() + ". \n"
@@ -661,22 +668,27 @@ public class Game {
 			}
 		}
 		
+		// SENDMESSAGENEXT CANNOT BE SET TO TRUE AGAIN AFTER QUEST IS COMPLETED
+		// QUEST COMPLETION CAN NEVER BE UNDONE
 		private void handleIncQuestrelatedItem(Item item) {
 			if(item.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().incrementProgress();
 			}
-			if(this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+			if(!(this.getCurrentQuest().isCompleted()) && this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
 				this.getCurrentQuest().setQuestCompleted(true);
 				this.getCurrentQuest().setSendMessageNext(true);
 			}
 		}
 		
+		// DECREASES QUESTPROGESS RELATED TO THE ITEM
+		// DOES NOT AFFECT COMPLETION STATUS
 		private void handleDecQuestrelatedItem(Item item) {
 			if(item.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().decrementProgress();
 			}
 		}
 		
+		// INCREASES ENEMY-RELATED QUEST PROGRESS
 		private void handleQuestrelatedEnemy(Enemy enemy) {
 			if(enemy.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().incrementProgress();
@@ -687,7 +699,7 @@ public class Game {
 			}
 		}
 		
-		
+		/////////////////////////////////////////////////////////////////////	
 		/////////////////////////////////////////////////////////////////////		
 		// SPAWN NEW ENEMY AT LOCATION
 		// CANNOT SPAWN TWO ENEMIES WITH THE SAME NAME STRING AT THE SAME LOCATION
@@ -718,7 +730,7 @@ public class Game {
 		
 		// 20% CHANCE TO SPAWN A BANDIT AT LOCATION
 		public void spawnNpcOnChance(Location location) {
-			if(Math.random() < 0.20) {
+			if(location.isOutdoors() && Math.random() < 0.20) {
 				this.spawnEnemy(location);
 			}
 		}
