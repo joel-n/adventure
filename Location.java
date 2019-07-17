@@ -37,7 +37,7 @@ public class Location {
 	
 	public void addItem(Item item) {
 		if(this.getPlaceInventory().get(item.getName()) == null) {
-			ItemStack itemStack = new ItemStack(Integer.MAX_VALUE);
+			ItemStack itemStack = new ItemStack(1000);
 			itemStack.addItem(item);
 			this.getPlaceInventory().put(item.getName(), itemStack);
 		}
