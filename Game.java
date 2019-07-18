@@ -96,6 +96,16 @@ public class Game {
 				"You cannot go in that direction. Watch out for the thorny bushes.",true);
 		this.addLocation(westhills);
 		
+		Location lake = new Location("lake", "Evalon Lake. A magnificent lake with a calm body of water.",
+				"You cannot go in that direction, nothing but fish over there.",true);
+		this.addLocation(lake);
+		
+		Location laketown = new Location("laketown", "Messny village. A quiet village with wooden houses and a dirt road.",
+				"You cannot go in that direction, probably nothing interesting over there.",true);
+		
+		Location inn = new Room("inn", "Messny Inn. A small but charming inn in the centre of the village.",
+				"You cannot go in that direction.",false);
+		
 		// CONNECTING LOCATIONS
 		// IT DOES NOT MATTER ON WHICH LOCATION THE METHOD ADDPATHS IS CALLED
 		valley.addPaths(valley, "east", plains, "west");
@@ -103,9 +113,14 @@ public class Game {
 		valley.addPaths(valley, "west", shore, "east");
 		valley.addPaths(valley, "south", woods, "north");
 		woods.addPaths(woods, "east", hills, "west");
+		hills.addPaths(hills, "south", westhills, "north");
+		westhills.addPaths(westhills, "west", lake, "south");
+		lake.addPaths(woods, "south", lake, "north");
+		lake.addPaths(lake, "east", laketown, "west");
 		mountain.addPaths(mountain, "cave", cave, "exit");
+		laketown.addPaths(laketown, "inn", inn, "exit");
 		
-		// cave.addPaths(cave, "inwards", innercave, "entrance");
+
 		
 		// CREATE EMPTY ARMOR SET FOR GAME START AND UNEQUIPS
 		BodyArmor noBodyArmor = new BodyArmor("unarmored", 0, 0, true, 0);
@@ -136,8 +151,10 @@ public class Game {
 		hills.addItem(swordEvalon);
 		
 		Potion potion2 = new Potion("largepotion", 2, 200, true, 25);
-		Potion potion3 = new Potion("stuckpotion", 2, 200, false, 25);
-		Potion potion4 = new Potion("heavypotion", 2000, 200, true, 25);
+		Potion potion3 = new Potion("potion", 2, 200, true, 25);
+		Potion potion4 = new Potion("potion", 2, 200, true, 25);
+		lake.addItem(potion3);
+		inn.addItem(potion4);
 		
 		Item potion5 = new Potion("potion", 1, 100, true, 10);
 		Item potion6 = new Potion("potion", 1, 100, true, 10);
@@ -149,14 +166,20 @@ public class Game {
 		Chest chest = new Chest("chest", 50, 100, false, 50);
 		valley.addItem(chest);
 		chest.addItem(potion2);
-		chest.addItem(potion3);
-		chest.addItem(potion4);
 		
+		Chest chest2 = new Chest("chest", 10, 10, false, 20);
+		inn.addItem(chest2);
 		
 		// ENEMY LOOT
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
-		// ADDING ENEMY TO WORLD
+		// ADDING NPC TO WORLD
+		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.");
+		inn.addNpc(innkeeper);
+		
+		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!");
+		laketown.addNpc(villager);
+		
 		Enemy enemy1 = new Enemy("Enemy", true, "Come at me!", 50, chestplate, 200, 10);
 		mountain.addNpc(enemy1);
 		
