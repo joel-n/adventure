@@ -92,6 +92,10 @@ public class Game {
 		Location innercave = new Location("innercave", "Blood Cave. This path must lead somewhere.",
 				"Better not go over there.",true);
 		
+		Location westhills = new Location("westhills", "Thornhills. A great many trees cover the steep hills.",
+				"You cannot go in that direction. Watch out for the thorny bushes.",true);
+		this.addLocation(westhills);
+		
 		// CONNECTING LOCATIONS
 		// IT DOES NOT MATTER ON WHICH LOCATION THE METHOD ADDPATHS IS CALLED
 		valley.addPaths(valley, "east", plains, "west");
