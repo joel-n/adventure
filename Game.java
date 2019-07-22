@@ -21,6 +21,10 @@ public class Game {
 	private boolean isLooting;
 	private Chest currentChest;
 	
+	// trading
+	private boolean isTrading;
+	private Npc currentTrader;
+	
 	// default armor/weapon slots
 	private BodyArmor defaultBodyArmor;
 	private Boots defaultBoots;
@@ -174,10 +178,10 @@ public class Game {
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
 		// ADDING NPC TO WORLD
-		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.");
+		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",false);
 		inn.addNpc(innkeeper);
 		
-		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!");
+		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!",false);
 		laketown.addNpc(villager);
 		
 		Enemy enemy1 = new Enemy("Enemy", true, "Come at me!", 50, chestplate, 200, 10);
@@ -216,7 +220,7 @@ public class Game {
 		else if(this.inBattle() == true) {
 			switch(text[0]) {
 			case "attack": return this.attack(); 			// ALSO TRIGGERS ENEMY ATTACK
-			case "escape": return this.runAway();
+			case "escape": return this.exit();
 			case "help": return this.help();
 			default: return "You cannot do that.";
 			}
@@ -231,7 +235,7 @@ public class Game {
 			case "inventory": return this.inventory();
 			case "equipment": return this.equipment();
 			case "drink": return this.drink(text[1]);
-			case "exit": return this.exitChest();
+			case "exit": return this.exit();
 			case "help": return this.help();
 			default: return "You cannot do that.";
 			}
@@ -373,6 +377,43 @@ public class Game {
 		
 		/////////////////////////////////////////////////////////////////////	
 		/////////////////////////////////////////////////////////////////////	
+		// TRADING
+		
+		
+		public String trade(String npcName) {
+			if(this.getPlayer().getCurrentLocation().getNpc(npcName) == null) {
+				return "This person is not here.";
+			}
+			else if(!(this.getPlayer().getCurrentLocation().getNpc(npcName).canTrade())) {
+				return "You cannot trade with this person.";
+			}
+			else {
+				this.setIsTrading(true);
+				this.setCurrentTrader(this.getPlayer().getCurrentLocation().getNpc(npcName));
+				return "You are now trading with " + this.getCurrentTrader().getName() + ".";
+			}
+		}
+		
+		
+		public boolean isTrading() {
+			return this.isTrading;
+		}
+		
+		public void setIsTrading(boolean isTrading) {
+			this.isTrading = isTrading;
+		}
+		
+		public void setCurrentTrader(Npc trader) {
+			this.currentTrader = trader;
+		}
+		
+		public Npc getCurrentTrader() {
+			return this.currentTrader;
+		}
+		
+		
+		/////////////////////////////////////////////////////////////////////	
+		/////////////////////////////////////////////////////////////////////	
 		// CHEST
 		// TAKES CHEST CAPACITY IN CONSIDERATION:
 		public String takeChestItem(String itemName) {
@@ -425,13 +466,21 @@ public class Game {
 				}
 		}
 		
-		public String exitChest() {
-			if (this.isLooting() == false) {
-				return "You are not looting";
-			}
-			else {
+		public String exit() {
+			if (this.isLooting() == true) {
 				this.setIsLooting(false);
 				return "You are no longer looting.";
+			}
+			else if(this.isTrading()) {
+				this.setIsTrading(false);
+				return "You are to longer trading with " + this.getCurrentTrader().getName() + ".";
+			}
+			else if(this.inBattle()) {
+				this.setInBattle(false);
+				return "You are no longer in battle.";
+			}
+			else {
+				return "You cannot do that.";
 			}
 		}
 		
@@ -579,11 +628,6 @@ public class Game {
 				this.setCurrentEnemy((Enemy) this.getPlayer().getCurrentLocation().getNpc(enemyName));
 				this.setInBattle(true);
 				return "You are now fighting " + enemyName + ".";
-		}
-		
-		public String runAway() {
-			this.setInBattle(false);
-			return "You are no longer in battle.";
 		}
 		
 		public String attack() {

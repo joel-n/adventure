@@ -4,13 +4,16 @@ public class Npc {
 	
 	private String name;
 	private boolean attackable;
-	private String talkLine; 
+	private boolean canTrade;
+	private String talkLine;
+	
 	// possible later to implement custom cannotattackLine "not able to attack this person, too strong/is friend" etc
 	
-	public Npc(String name, boolean attackable, String talkLine) {
+	public Npc(String name, boolean attackable, String talkLine, boolean canTrade) {
 		this.setName(name);
 		this.setAttackable(attackable);
 		this.setTalkLine(talkLine);
+		this.setCanTrade(canTrade);
 	}
 	
 	public String getName() {
@@ -19,6 +22,14 @@ public class Npc {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setCanTrade(boolean canTrade) {
+		this.canTrade = canTrade;
+	}
+	
+	public boolean canTrade() {
+		return this.canTrade;
 	}
 	
 	public boolean isAttackable() {
