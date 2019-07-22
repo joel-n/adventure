@@ -85,6 +85,19 @@ public class Chest extends Item {
 		}
 	}
 	
+	public String printContentWithPrice() {
+		if(this.getContent().isEmpty()) {
+			return this.getName() + " is empty.";
+		}
+		else {
+			String s = new String(this.getName() + " contains: \n");
+			for(HashMap.Entry<String,ItemStack> entry : this.getContent().entrySet()) {
+				s = s.concat(entry.getValue().getNumber() + " " + entry.getKey() + "  (" + entry.getValue().getItem().getPrice() + " gold) \n");
+			}
+			return s;
+		}
+	}
+	
 	public void setItemSlots(int slots) {
 		this.itemSlots = slots;
 	}

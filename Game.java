@@ -178,10 +178,10 @@ public class Game {
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
 		// ADDING NPC TO WORLD
-		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",false);
+		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",false,0);
 		inn.addNpc(innkeeper);
 		
-		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!",false);
+		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!",false,0);
 		laketown.addNpc(villager);
 		
 		Enemy enemy1 = new Enemy("Enemy", true, "Come at me!", 50, chestplate, 200, 10);
@@ -390,10 +390,50 @@ public class Game {
 			else {
 				this.setIsTrading(true);
 				this.setCurrentTrader(this.getPlayer().getCurrentLocation().getNpc(npcName));
-				return "You are now trading with " + this.getCurrentTrader().getName() + ".";
+				return "You are now trading with " + this.getCurrentTrader().getName() + ". \n" +
+					this.getCurrentTrader().getNpcInventory().printContent();
 			}
 		}
 		
+		public String printGoodsAndGold() {
+			return this.getCurrentTrader().getNpcInventory().printContentWithPrice()
+					+ this.getCurrentTrader().printGold();
+		}
+		
+		public String buy(String itemName) {
+			if(this.getCurrentTrader().getNpcInventory().getItem(itemName) == null) {
+				return this.getCurrentTrader().getName() + " does not have this item.";
+			}
+			else if(this.getCurrentTrader().getNpcInventory().getItem(itemName).getPrice() > this.getPlayer().getGold()) {
+				return "You do not have enough gold to purchase this item.";
+			}
+			else if (this.getCurrentTrader().getNpcInventory().getItem(itemName).getWeight() > this.getPlayer().getCarryCapacity()) {
+				return "You cannot any more items right now.";
+			}
+			else {
+				this.getPlayer().addItem(this.getCurrentTrader().getItem(itemName));
+				this.getPlayer().changeGold(0-this.getCurrentTrader().getItem(itemName).getPrice());
+				this.getCurrentTrader().changeNpcGold(this.getCurrentTrader().getItem(itemName).getPrice());
+				this.getCurrentTrader().removeItem(itemName);
+				return "You bought " + itemName + " for " + this.getPlayer().getItem(itemName).getPrice() + " gold. \n";
+			}
+		}
+		
+		public String sell(String itemName) {
+			if(this.getPlayer().getItem(itemName) == null) {
+				return "You do not have this item.";
+			}
+			else if(this.getCurrentTrader().getNpcGold() < this.getPlayer().getItem(itemName).getPrice()) {
+				return this.getCurrentTrader().getName() + " does not have enough gold.";
+			}
+			else {
+				this.getCurrentTrader().addItem(this.getPlayer().getItem(itemName));
+				this.getPlayer().changeGold(this.getPlayer().getItem(itemName).getPrice());
+				this.getCurrentTrader().changeNpcGold(0-this.getPlayer().getItem(itemName).getPrice());
+				this.getCurrentTrader().removeItem(itemName);
+				return "You sold " + itemName + " for " + this.getCurrentTrader().getItem(itemName).getPrice() + " gold.";
+			}
+		}
 		
 		public boolean isTrading() {
 			return this.isTrading;

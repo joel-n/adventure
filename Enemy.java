@@ -12,7 +12,7 @@ public class Enemy extends Npc {
 	
 	
 	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack) {
-		super(name,attackable,talkLine);
+		super(name,attackable,talkLine,false,0);
 		this.setHealth(health);
 		this.setLoot(lootItem);
 		this.setXpYield(xpYield);
@@ -21,7 +21,7 @@ public class Enemy extends Npc {
 	}
 	
 	public Enemy(String name, boolean attackable, String talkLine, int health, Item lootItem, int xpYield, int attack, int questId) {
-		super(name,attackable,talkLine);
+		super(name,attackable,talkLine,false,0);
 		this.setHealth(health);
 		this.setLoot(lootItem);
 		this.setXpYield(xpYield);
