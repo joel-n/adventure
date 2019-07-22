@@ -10,30 +10,33 @@ public class Quest {
 	private int id;
 	private boolean givesReward;
 	private Item reward;
+	private int xpYield;
 	
 	private int progress;
 	private int goal;
 	
-	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int progress, int goal, boolean givesReward, Item reward) {
+	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int xpYield, int progress, int goal, Item reward) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
 		this.setSendMessageNext(sendMessageNext);
 		this.setQuestCompleted(completed);
 		this.setId(id);
+		this.setXpYield(xpYield);
 		this.setProgress(progress);
 		this.setGoal(goal);
 		this.setGivesReward(true);
 		this.setReward(reward);
 	}
 	
-	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int progress, int goal, boolean givesReward) {
+	public Quest(String name, String description, String completionMessage, boolean sendMessageNext, boolean completed, int id, int xpYield, int progress, int goal) {
 		this.setName(name);
 		this.setDescription(description);
 		this.setCompletionMessage(completionMessage);
 		this.setSendMessageNext(sendMessageNext);
 		this.setQuestCompleted(completed);
 		this.setId(id);
+		this.setXpYield(xpYield);
 		this.setProgress(progress);
 		this.setGoal(goal);
 		this.setGivesReward(false);
@@ -121,6 +124,14 @@ public class Quest {
 	
 	public int getGoal() {
 		return this.goal;
+	}
+	
+	public void setXpYield(int xpYield) {
+		this.xpYield = xpYield;
+	}
+	
+	public int getXpYield() {
+		return this.xpYield;
 	}
 	
 	public void incrementProgress() {
