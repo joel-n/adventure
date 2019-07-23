@@ -75,18 +75,23 @@ public class Player {
 		Command exit = new Command("exit", "Stop looting.");
 		cmdstore.addCommand(exit);
 		Command loot = new Command("loot", "Loot a chest.");
-		cmdstore.addCommand(loot);
-		
+		cmdstore.addCommand(loot);		
 		Command attack = new Command("attack", "Attack an enemy");
 		cmdstore.addCommand(attack);
 		Command escape = new Command("escape", "Escape from battle.");
-		cmdstore.addCommand(escape);
-		
+		cmdstore.addCommand(escape);		
 		Command quest = new Command("quest","View questlog.");
 		cmdstore.addCommand(quest);
-		
 		Command read = new Command("read","Read a scroll.");
 		cmdstore.addCommand(read);
+		
+		Command trade = new Command("trade","Buy and sell goods.");
+		cmdstore.addCommand(trade);
+		Command buy = new Command("buy","Buy an item.");
+		cmdstore.addCommand(buy);
+		Command sell = new Command("sell","Sell an item.");
+		cmdstore.addCommand(sell);
+		
 	}
 	
 	

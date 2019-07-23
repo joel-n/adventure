@@ -217,7 +217,7 @@ public class Game {
 		if (getEnteredCommand(text[0]) == null) {
 			return "This is not possible.";
 		}
-		else if(this.inBattle() == true) {
+		else if(this.inBattle()) {
 			switch(text[0]) {
 			case "attack": return this.attack(); 			// ALSO TRIGGERS ENEMY ATTACK
 			case "escape": return this.exit();
@@ -225,19 +225,29 @@ public class Game {
 			default: return "You cannot do that.";
 			}
 		}
-		else if(this.isLooting() == true) {
+		else if(this.isLooting()) {
 			switch(text[0]) {
 			case "take": return this.takeChestItem(text[1]);
 			case "place": return this.placeItemInChest(text[1]);
 			case "look": return this.look();
 			case "equip": return this.equipItem(text[1]);
 			case "unequip": return this.unequipItem(text[1]);
-			case "inventory": return this.inventory();
-			case "equipment": return this.equipment();
+			case "inventory": return this.printPlayerInventory();
+			case "equipment": return this.printPlayerEquipment();
 			case "drink": return this.drink(text[1]);
 			case "exit": return this.exit();
 			case "help": return this.help();
 			default: return "You cannot do that.";
+			}
+		}
+		else if(this.isTrading()) {
+			switch(text[0]) {
+			case "look": return this.look();
+			case "exit": return this.exit();
+			case "buy": return this.buy(text[1]);
+			case "sell": return this.sell(text[1]);
+			case "inventory": return this.printPlayerInventory();
+			default: return "You cannot do that";
 			}
 		}
 		else {
@@ -249,10 +259,11 @@ public class Game {
 			case "equip": return this.equipItem(text[1]);
 			case "unequip": return this.unequipItem(text[1]);
 			case "read": return this.read(text[1]);
+			case "trade": return this.trade(text[1]);
 			case "look": return this.look();
-			case "quest": return this.quest();
-			case "inventory": return this.inventory();
-			case "equipment": return this.equipment();
+			case "quest": return this.printQuestStatus();
+			case "inventory": return this.printPlayerInventory();
+			case "equipment": return this.printPlayerEquipment();
 			case "help": return this.help();
 			case "loot": return this.loot(text[1]);
 			case "attack": return this.engageEnemy(text[1]);
@@ -297,7 +308,9 @@ public class Game {
 		public String look() {
 			if(this.isLooting() == true) {
 				return this.getCurrentChest().printContent();
-				// return this.getCurrentChest().getName() + " contains: "	+ this.getCurrentChest().getContent().keySet().toString() + ".";
+			}
+			else if (this.isTrading()) {
+				return this.getCurrentTrader().getNpcInventory().printContentWithPrice() + this.getCurrentTrader().printGold();
 			}
 			else {
 				return "You are at " + this.getPlayer().getCurrentLocation().getDescription() + "\n" +
@@ -614,7 +627,7 @@ public class Game {
 		
 		
 		// returns information on the players items, carry capacity and gold
-		public String inventory() {
+		public String printPlayerInventory() {
 			if(this.getPlayer().getInventory().getContent().isEmpty()) {
 				return "You have no items in your inventory." + "\n"
 						+ "You can carry " + this.getPlayer().getCarryCapacity() + " more units of weight. \n"
@@ -631,7 +644,7 @@ public class Game {
 		
 		// display equipped items
 		// ADDING .replace("[", "").replace("]", "") AFTER STRING WOULD REMOVE BRACKETS
-		public String equipment() {
+		public String printPlayerEquipment() {
 			return this.getPlayer().presentEquippedItems();
 		}
 		
@@ -739,7 +752,7 @@ public class Game {
 		// CANNOT BE TRIGGERED AGAIN SINCE SENDMESSAGENEXT IS SET TO FALSE AFTER
 		// SENDMESSAGENEXT CANNOT BE SET TO TRUE AGAIN AFTER QUEST IS COMPLETED
 		// QUEST COMPLETION CAN NEVER BE UNDONE
-		public String quest() {
+		public String printQuestStatus() {
 			if(this.getCurrentQuest().getName().equals("noquest")) { // INITIAL QUEST CALLED "noquest"
 				return "You have completed no quests, look for something to do!";
 			}
