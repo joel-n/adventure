@@ -181,6 +181,11 @@ public class Game {
 		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",true,1000);
 		inn.addNpc(innkeeper);
 		
+		Item potion7 = new Potion("potion", 1, 100, true, 10);
+		Item potion8 = new Potion("potion", 1, 100, true, 10);
+		innkeeper.addItem(potion7);
+		innkeeper.addItem(potion8);
+		
 		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!",false,0);
 		laketown.addNpc(villager);
 		
@@ -443,7 +448,7 @@ public class Game {
 				this.getCurrentTrader().addItem(this.getPlayer().getItem(itemName));
 				this.getPlayer().changeGold(this.getPlayer().getItem(itemName).getPrice());
 				this.getCurrentTrader().changeNpcGold(0-this.getPlayer().getItem(itemName).getPrice());
-				this.getCurrentTrader().removeItem(itemName);
+				this.getPlayer().removeItem(itemName);
 				return "You sold " + itemName + " for " + this.getCurrentTrader().getItem(itemName).getPrice() + " gold.";
 			}
 		}
