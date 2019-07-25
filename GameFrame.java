@@ -45,9 +45,13 @@ public class GameFrame extends JFrame {
     	return this.getGame().isLooting();
     }
     
+    private boolean isTrading() {
+    	return this.getGame().isTrading();
+    }
+    
     
     public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel) {
-    	if(this.isLooting()) {
+    	if(this.isLooting() || this.isTrading()) {
     		this.getChangeableButton().setText("Exit");
     		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
         		this.getChangeableButton().removeActionListener(al);
