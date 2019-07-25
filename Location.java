@@ -47,7 +47,6 @@ public class Location {
 	}
 	
 	public void removeItem(String itemName) {
-		this.getPlaceInventory().remove(itemName);
 		if(this.getPlaceInventory().get(itemName).getNumber() <= 1) {
 			this.getPlaceInventory().remove(itemName);
 		}

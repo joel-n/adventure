@@ -178,7 +178,7 @@ public class Game {
 		BodyArmor chestplate = new BodyArmor("chestplate", 20, 200, true, 20);
 		
 		// ADDING NPC TO WORLD
-		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",false,0);
+		Npc innkeeper = new Npc("Innkeeper", false, "Hello, we have rooms available if you want to stay over night.",true,1000);
 		inn.addNpc(innkeeper);
 		
 		Npc villager = new Npc("Lumberjack", false, "Gotta get those logs back to the mill soon, but first a few pints at the inn!",false,0);
@@ -197,7 +197,7 @@ public class Game {
 		this.getPlayer().setLocation(valley);
 		
 		// QUEST
-		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,0,0,0,0);
+		Quest noquest = new Quest("noquest","nodesc","nocomp",false,true,1000,0,0,0);
 		this.setCurrentQuest(noquest);
 		
 		
@@ -780,9 +780,12 @@ public class Game {
 			if(item.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().incrementProgress();
 			}
-			if(!(this.getCurrentQuest().isCompleted()) && this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+			else if(!(this.getCurrentQuest().isCompleted()) && this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
 				this.getCurrentQuest().setQuestCompleted(true);
 				this.getCurrentQuest().setSendMessageNext(true);
+			}
+			else {
+				;
 			}
 		}
 		
@@ -799,9 +802,12 @@ public class Game {
 			if(enemy.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().incrementProgress();
 			}
-			if(this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+			else if(this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
 				this.getCurrentQuest().setQuestCompleted(true);
 				this.getCurrentQuest().setSendMessageNext(true);
+			}
+			else {
+				
 			}
 		}
 		
