@@ -38,6 +38,10 @@ public class Enemy extends Npc {
 		return this.health;
 	}
 	
+	public String printHealth() {
+		return this.getName() + " has " + this.getHealth() + " health.\n";
+	}
+	
 	public void setLoot(Item item) {
 		this.loot = item;
 	}

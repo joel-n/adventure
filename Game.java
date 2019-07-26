@@ -715,7 +715,8 @@ public class Game {
 			else {
 				this.triggerEnemyAttack();
 				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n"
-						+ this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.";
+						+ this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.\n"
+								+ this.getCurrentEnemy().printHealth();
 			}
 		}
 		
