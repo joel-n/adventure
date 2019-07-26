@@ -118,9 +118,9 @@ public class Game {
 		valley.addPaths(valley, "south", woods, "north");
 		woods.addPaths(woods, "east", hills, "west");
 		hills.addPaths(hills, "south", westhills, "north");
-		westhills.addPaths(westhills, "west", lake, "south");
+		westhills.addPaths(westhills, "west", lake, "east");
 		lake.addPaths(woods, "south", lake, "north");
-		lake.addPaths(lake, "east", laketown, "west");
+		lake.addPaths(lake, "west", laketown, "east");
 		mountain.addPaths(mountain, "cave", cave, "exit");
 		laketown.addPaths(laketown, "inn", inn, "exit");
 		
