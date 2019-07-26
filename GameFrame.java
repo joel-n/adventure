@@ -18,6 +18,7 @@ public class GameFrame extends JFrame {
 	
 	private Game game;
 	private JButton changeableButton;
+	private JButton changeableButton2;
 	
 	public Game getGame() {
 		return this.game;
@@ -33,6 +34,14 @@ public class GameFrame extends JFrame {
 	
 	public void setChangeableButton(JButton button) {
 		this.changeableButton = button;
+	}
+	
+	public JButton getChangeableButton2() {
+		return this.changeableButton2;
+	}
+	
+	public void setChangeableButton2(JButton button) {
+		this.changeableButton2 = button;
 	}
 	
 	///////////////////////////////////////////////// HELP METHODS
@@ -53,11 +62,20 @@ public class GameFrame extends JFrame {
     public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel, JTextArea xp, JTextArea levelbar,
     		XpBar xpbar, HealthBar healthbar, JTextField healthtext) {
     	if(this.isLooting() || this.isTrading()) {
-    		this.getChangeableButton().setText("Exit");
+    		this.getChangeableButton().setText("Look");
     		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
         		this.getChangeableButton().removeActionListener(al);
     		}
     		this.getChangeableButton().addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+    			}
+    		});
+    		this.getChangeableButton2().setText("Exit");
+    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+        		this.getChangeableButton2().removeActionListener(al);
+    		}
+    		this.getChangeableButton2().addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent event) {
     				handleInputForButton(input,output,"exit",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
     			}
@@ -74,6 +92,15 @@ public class GameFrame extends JFrame {
     				handleInputForButton(input,output,"attack",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
     			}
     		});
+    		this.getChangeableButton2().setText("Escape");
+    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+        		this.getChangeableButton2().removeActionListener(al);
+    		}
+    		this.getChangeableButton2().addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"escape",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+    			}
+    		});
     		buttonPanel.repaint();
         }
     	else {
@@ -84,6 +111,15 @@ public class GameFrame extends JFrame {
     		this.getChangeableButton().addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent event) {
     				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+    			}
+    		});
+    		this.getChangeableButton2().setText("Quest");
+    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+        		this.getChangeableButton2().removeActionListener(al);
+    		}
+    		this.getChangeableButton2().addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent event) {
+    				handleInputForButton(input,output,"quest",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
     			}
     		});
     		buttonPanel.repaint();
@@ -174,6 +210,14 @@ public class GameFrame extends JFrame {
 	        	}
 	        });
 	        
+	        JButton changeableButton2 = new JButton("Quest");
+	        changeableButton2.setPreferredSize(new Dimension(100, 80));
+	        changeableButton2.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent event) {
+	        		handleInputForButton(input,output,"quest",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	        	}
+	        });
+	        
 	        
 	        JPanel inputPanel = new JPanel();
 	        
@@ -201,6 +245,9 @@ public class GameFrame extends JFrame {
 	        
 	        this.setChangeableButton(changeableButton);
 	        buttonPanel.add(this.getChangeableButton());
+	        
+	        this.setChangeableButton2(changeableButton2);
+	        buttonPanel.add(this.getChangeableButton2());
 	        
 	        levelpanel.add(xpbar, BorderLayout.CENTER);
 	        
