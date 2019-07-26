@@ -206,7 +206,7 @@ public class Game {
 		this.setCurrentQuest(noquest);
 		
 		
-		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,0,1,200);
+		Quest firstquest = new Quest("A New Journey","Find the lost sword of Evalon.","You have found the lost sword of Evalon!",false,false,1,400,0,1);
 		
 		Scroll scroll = new Scroll("Questscroll",1,1,true,firstquest);
 		mountain.addItem(scroll);
@@ -775,18 +775,20 @@ public class Game {
 			else {
 				return "Current Quest: \n"
 						+ this.getCurrentQuest().getName() + "\n"
-						+ this.getCurrentQuest().getDescription() + "\n";
+						+ this.getCurrentQuest().getDescription() + "\n" + 
+						this.getCurrentQuest().printProgress();
 
 			}
 		}
 		
 		// SENDMESSAGENEXT CANNOT BE SET TO TRUE AGAIN AFTER QUEST IS COMPLETED
 		// QUEST COMPLETION CAN NEVER BE UNDONE
+		// XP GAIN HANDLED IN PRINT-QUEST-STATUS ABOVE
 		private void handleIncQuestrelatedItem(Item item) {
 			if(item.getQuestId() == this.getCurrentQuest().getId()) {
 				this.getCurrentQuest().incrementProgress();
 			}
-			else if(!(this.getCurrentQuest().isCompleted()) && this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
+			if(!(this.getCurrentQuest().isCompleted()) && this.getCurrentQuest().getProgress() >= this.getCurrentQuest().getGoal()) {
 				this.getCurrentQuest().setQuestCompleted(true);
 				this.getCurrentQuest().setSendMessageNext(true);
 			}

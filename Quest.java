@@ -126,6 +126,10 @@ public class Quest {
 		return this.goal;
 	}
 	
+	public String printProgress() {
+		return "Progress: " + this.getProgress() + "/" + this.getGoal();
+	}
+	
 	public void setXpYield(int xpYield) {
 		this.xpYield = xpYield;
 	}
