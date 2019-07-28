@@ -135,7 +135,7 @@ public class GameFrame extends JFrame {
 	        frame.setResizable(false);
 
 	        JLabel emptyLabel = new JLabel("");
-	        emptyLabel.setPreferredSize(new Dimension(600, 600));
+	        emptyLabel.setPreferredSize(new Dimension(1800, 1000));
 	        frame.getContentPane().add(emptyLabel, BorderLayout.CENTER);
 	        
 	        
@@ -184,7 +184,6 @@ public class GameFrame extends JFrame {
 	        		}
 	            }
 	        });
-	        
 	        
 	        JButton inventoryButton = new JButton("Inventory");
 	        inventoryButton.setPreferredSize(new Dimension(100, 50));
