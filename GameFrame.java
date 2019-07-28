@@ -45,12 +45,12 @@ public class GameFrame extends JFrame {
 	        JScrollPane scrollableOutput = new JScrollPane(output);
 	        scrollableOutput.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	        
-	        JTextArea xp = new JTextArea("XP: 0/1000",1,1);
+	        JTextArea xp = new JTextArea("",1,1);
 	        xp.setEditable(false);
 	        xp.setOpaque(false);
 	        xp.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        
-	        JTextArea levelbar = new JTextArea("Level: 1",1,1);
+	        JTextArea levelbar = new JTextArea("",1,1);
 	        levelbar.setEditable(false);
 	        levelbar.setOpaque(false);
 	        levelbar.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -162,11 +162,8 @@ public class GameFrame extends JFrame {
 	        output.setText("Welcome to the world of Evalon! \n"
 	        		+ "Type \"help\" and press Enter to get a list of available commands. ");
 	       
-	        
-	        
-	        healthbar.setPercent(100);
-	        healthbar.repaint();
-	        
+	        this.updateHealthBar(healthbar, healthtext);
+	        this.updateXpAndLevel(xp, levelbar, xpbar);
 	    }
 		
 	    public void handleInput(JTextField input, JTextArea output) {
