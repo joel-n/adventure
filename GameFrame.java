@@ -20,112 +20,6 @@ public class GameFrame extends JFrame {
 	private JButton changeableButton;
 	private JButton changeableButton2;
 	
-	public Game getGame() {
-		return this.game;
-	}
-	
-	public void setGame(Game game) {
-		this.game = game;
-	}
-	
-	public JButton getChangeableButton() {
-		return this.changeableButton;
-	}
-	
-	public void setChangeableButton(JButton button) {
-		this.changeableButton = button;
-	}
-	
-	public JButton getChangeableButton2() {
-		return this.changeableButton2;
-	}
-	
-	public void setChangeableButton2(JButton button) {
-		this.changeableButton2 = button;
-	}
-	
-	///////////////////////////////////////////////// HELP METHODS
-	// USED TO CHANGE UI WHEN SWITCHING BETWEEN LOOTING AND BATTLE
-    private boolean inBattle() {
-    	return this.getGame().inBattle();
-    }
-
-    private boolean isLooting() {
-    	return this.getGame().isLooting();
-    }
-    
-    private boolean isTrading() {
-    	return this.getGame().isTrading();
-    }
-    
-    
-    public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel, JTextArea xp, JTextArea levelbar,
-    		XpBar xpbar, HealthBar healthbar, JTextField healthtext) {
-    	if(this.isLooting() || this.isTrading()) {
-    		this.getChangeableButton().setText("Look");
-    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
-        		this.getChangeableButton().removeActionListener(al);
-    		}
-    		this.getChangeableButton().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		this.getChangeableButton2().setText("Exit");
-    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
-        		this.getChangeableButton2().removeActionListener(al);
-    		}
-    		this.getChangeableButton2().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"exit",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		buttonPanel.repaint();
-        }
-    	else if(this.inBattle()) {
-    		this.getChangeableButton().setText("Attack");
-    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
-        		this.getChangeableButton().removeActionListener(al);
-    		}
-    		this.getChangeableButton().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"attack",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		this.getChangeableButton2().setText("Escape");
-    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
-        		this.getChangeableButton2().removeActionListener(al);
-    		}
-    		this.getChangeableButton2().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"escape",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		buttonPanel.repaint();
-        }
-    	else {
-    		this.getChangeableButton().setText("Look");
-    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
-        		this.getChangeableButton().removeActionListener(al);
-    		}
-    		this.getChangeableButton().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		this.getChangeableButton2().setText("Quest");
-    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
-        		this.getChangeableButton2().removeActionListener(al);
-    		}
-    		this.getChangeableButton2().addActionListener(new ActionListener() {
-    			public void actionPerformed(ActionEvent event) {
-    				handleInputForButton(input,output,"quest",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
-    			}
-    		});
-    		buttonPanel.repaint();
-    	}
-    }
-
 
 	// FRAME
 		public void createAndShowGUI() {
@@ -151,12 +45,12 @@ public class GameFrame extends JFrame {
 	        JScrollPane scrollableOutput = new JScrollPane(output);
 	        scrollableOutput.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	        
-	        JTextArea xp = new JTextArea("",1,1);
+	        JTextArea xp = new JTextArea("XP: 0/1000",1,1);
 	        xp.setEditable(false);
 	        xp.setOpaque(false);
 	        xp.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 	        
-	        JTextArea levelbar = new JTextArea("",1,1);
+	        JTextArea levelbar = new JTextArea("Level: 1",1,1);
 	        levelbar.setEditable(false);
 	        levelbar.setOpaque(false);
 	        levelbar.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -165,7 +59,7 @@ public class GameFrame extends JFrame {
 	        XpBar xpbar = new XpBar();
 	              
 	        HealthBar healthbar = new HealthBar();
-	        JTextField healthtext = new JTextField("");
+	        JTextField healthtext = new JTextField("Health: 150/150");
 	        healthtext.setEditable(false);
 	        healthtext.setOpaque(false);
 	        healthtext.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -218,7 +112,7 @@ public class GameFrame extends JFrame {
 	        });
 	        
 	        
-	        JPanel inputPanel = new JPanel();
+
 	        
 
 	        //Display the window.
@@ -226,19 +120,27 @@ public class GameFrame extends JFrame {
 	        frame.setVisible(true);
 	        
 	        Container container = frame.getContentPane();
+	        
+	        JPanel bottomPanel = new JPanel();
+	        JPanel inputPanel = new JPanel();
+	        
 	        container.setLayout(new BorderLayout());
+	        bottomPanel.setLayout(new BorderLayout());
 	        levelpanel.setLayout(new BorderLayout());
-	        container.add(levelpanel, BorderLayout.PAGE_START);
+	        
 	        container.add(scrollableOutput, BorderLayout.CENTER); // added if output should be scrollable
 	        //container.add(output, BorderLayout.CENTER); // added if should not be scrollable
-	        container.add(inputPanel, BorderLayout.PAGE_END);
+	        container.add(bottomPanel, BorderLayout.PAGE_END);
+	        
+	        bottomPanel.add(levelpanel, BorderLayout.PAGE_START);
+	        bottomPanel.add(inputPanel, BorderLayout.PAGE_END);
 	        
 	        inputPanel.setLayout(new BorderLayout());
 	        inputPanel.add(buttonPanel, BorderLayout.PAGE_START);
 	        inputPanel.add(input, BorderLayout.PAGE_END);
 	        
 	        // buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-	        buttonPanel.setLayout(new GridLayout(1,3));
+	        buttonPanel.setLayout(new GridLayout(1,4));
 	        buttonPanel.add(inventoryButton);
 	        buttonPanel.add(equipmentButton);
 	        
@@ -259,6 +161,11 @@ public class GameFrame extends JFrame {
 	        // MESSAGE AT GAME START
 	        output.setText("Welcome to the world of Evalon! \n"
 	        		+ "Type \"help\" and press Enter to get a list of available commands. ");
+	       
+	        
+	        
+	        healthbar.setPercent(100);
+	        healthbar.repaint();
 	        
 	    }
 		
@@ -299,6 +206,115 @@ public class GameFrame extends JFrame {
 	    	healthtext.setText("Health: " + this.getGame().getPlayer().getHealth() +"/" +this.getGame().getPlayer().getMaxHealth());
 	    	healthbar.repaint();
 	    }
+	    
+	    
+		public Game getGame() {
+			return this.game;
+		}
+		
+		public void setGame(Game game) {
+			this.game = game;
+		}
+		
+		public JButton getChangeableButton() {
+			return this.changeableButton;
+		}
+		
+		public void setChangeableButton(JButton button) {
+			this.changeableButton = button;
+		}
+		
+		public JButton getChangeableButton2() {
+			return this.changeableButton2;
+		}
+		
+		public void setChangeableButton2(JButton button) {
+			this.changeableButton2 = button;
+		}
+		
+		///////////////////////////////////////////////// HELP METHODS
+		// USED TO CHANGE UI WHEN SWITCHING BETWEEN LOOTING AND BATTLE
+	    private boolean inBattle() {
+	    	return this.getGame().inBattle();
+	    }
+
+	    private boolean isLooting() {
+	    	return this.getGame().isLooting();
+	    }
+	    
+	    private boolean isTrading() {
+	    	return this.getGame().isTrading();
+	    }
+	    
+	    
+	    public void changeButton(JTextField input, JTextArea output, JPanel buttonPanel, JTextArea xp, JTextArea levelbar,
+	    		XpBar xpbar, HealthBar healthbar, JTextField healthtext) {
+	    	if(this.isLooting() || this.isTrading()) {
+	    		this.getChangeableButton().setText("Look");
+	    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+	        		this.getChangeableButton().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		this.getChangeableButton2().setText("Exit");
+	    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+	        		this.getChangeableButton2().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton2().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"exit",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		buttonPanel.repaint();
+	        }
+	    	else if(this.inBattle()) {
+	    		this.getChangeableButton().setText("Attack");
+	    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+	        		this.getChangeableButton().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"attack",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		this.getChangeableButton2().setText("Escape");
+	    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+	        		this.getChangeableButton2().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton2().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"escape",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		buttonPanel.repaint();
+	        }
+	    	else {
+	    		this.getChangeableButton().setText("Look");
+	    		for(ActionListener al : this.getChangeableButton().getActionListeners()) {
+	        		this.getChangeableButton().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"look",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		this.getChangeableButton2().setText("Quest");
+	    		for(ActionListener al : this.getChangeableButton2().getActionListeners()) {
+	        		this.getChangeableButton2().removeActionListener(al);
+	    		}
+	    		this.getChangeableButton2().addActionListener(new ActionListener() {
+	    			public void actionPerformed(ActionEvent event) {
+	    				handleInputForButton(input,output,"quest",buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
+	    			}
+	    		});
+	    		buttonPanel.repaint();
+	    	}
+	    }
+
+
 	    
 	    
 	    /////////////////////////////////////////////////////////////
