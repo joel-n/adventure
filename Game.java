@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 
 public class Game {
+	
+	private boolean gameOver;
 
 	private HashMap<String, Location> world;
 	private Player player;
@@ -33,6 +35,7 @@ public class Game {
 	private Weapon defaultWeapon;
 	
 	public Game() {
+		this.gameNotOver();
 		this.initAndSetPlayer();
 		this.getPlayer().initAndSetCommandStore();
 		this.initAndSetWorld();
@@ -46,6 +49,18 @@ public class Game {
 		Player player1 = new Player("Hero", 0, 150, 150, 100, 0,
 				1000, 2, 1);
 		this.player = player1;
+	}
+	
+	private void gameNotOver() {
+		this.gameOver = false;
+	}
+	
+	private void gameOver() {
+		this.gameOver = true;
+	}
+	
+	public boolean isGameOver() {
+		return this.gameOver;
 	}
 	
 	/*
@@ -717,10 +732,10 @@ public class Game {
 			else {
 				this.triggerEnemyAttack();
 					if(this.getPlayer().getHealth() <= 0) {
-						return this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.\n" + "You DIED.";
+
+						this.gameOver();
 						
-						// Fix end game routine
-						// this.endGame();
+						return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n You DIED.";
 					}
 					else {
 						return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n"

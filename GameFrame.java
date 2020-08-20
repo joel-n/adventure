@@ -5,6 +5,7 @@ import game.Game;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,12 @@ public class GameFrame extends JFrame {
 	private JButton changeableButton;
 	private JButton changeableButton2;
 	
+	private void checkGameOver() {
+		if(this.getGame().isGameOver()) {
+			JOptionPane.showMessageDialog(this, "You DIED.","Game Over.",JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
+		}
+	}
 
 	// FRAME
 		public void createAndShowGUI() {
@@ -173,6 +180,8 @@ public class GameFrame extends JFrame {
 	    	this.presentNew(output, this.getGame().executeCommand(argument));
 	    	
 	    	input.setText("");
+	    	
+	    	this.checkGameOver();
 	    }
 	    
 	    public void handleInputForButton(JTextField input, JTextArea output, String argument, JPanel buttonPanel, JTextArea xp, JTextArea levelbar,
@@ -184,6 +193,8 @@ public class GameFrame extends JFrame {
     		changeButton(input,output,buttonPanel,xp,levelbar,xpbar,healthbar,healthtext);
     		// buttonPanel.revalidate();
     		// buttonPanel.repaint();
+    		
+    		this.checkGameOver();
 	    }
 	    
 	    public void presentNew(JTextArea output, String string) {
@@ -310,8 +321,6 @@ public class GameFrame extends JFrame {
 	    		buttonPanel.repaint();
 	    	}
 	    }
-
-
 	    
 	    
 	    /////////////////////////////////////////////////////////////
