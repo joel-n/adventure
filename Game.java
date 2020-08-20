@@ -688,6 +688,8 @@ public class Game {
 				return "You are now fighting " + enemyName + ".";
 		}
 		
+		/////////////////////////////////////////
+		// PLAYER ATTACKS ENEMY FIRST, THEN HANDLES ANY DAMAGE FRPM ENEMY
 		public String attack() {
 			this.getCurrentEnemy().setHealth(this.getCurrentEnemy().getHealth()-this.getPlayer().getWeapon().getAttack());
 			if(this.getCurrentEnemy().isDefeated()) {
@@ -714,9 +716,17 @@ public class Game {
 			}
 			else {
 				this.triggerEnemyAttack();
-				return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n"
-						+ this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.\n"
-								+ this.getCurrentEnemy().printHealth();
+					if(this.getPlayer().getHealth() <= 0) {
+						return this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.\n" + "You DIED.";
+						
+						// Fix end game routine
+						// this.endGame();
+					}
+					else {
+						return "You attacked " + this.getCurrentEnemy().getName() + " for " + this.getPlayer().getWeapon().getAttack() + " damage. \n"
+								+ this.getCurrentEnemy().getName() + " attacked you for " + this.getCurrentEnemy().getAttack() + " damage.\n"
+										+ this.getCurrentEnemy().printHealth();
+					}
 			}
 		}
 		
